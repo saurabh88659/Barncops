@@ -38,7 +38,7 @@ const SignUpScreen = ({navigation}) => {
       last_name: lastName,
       password: password,
       phone_no: phoneNumber,
-      admin: false,
+      user: true,
     };
     const res = await signup(data);
     if (res.success) {
