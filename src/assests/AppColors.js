@@ -1,0 +1,21 @@
+export const AppColors = {
+  primaryColor: '#ff8000',
+  white: '#fff',
+  black: '#000',
+  transparent: '#FFFFFF00',
+  greyShade: '#d1d1d1',
+  grey: '#D9D9D9',
+  dark_grey: '#707070',
+  orange: '#ff8000',
+
+  oxfordBlue: '#020e5b',
+  greenSheen: '#6ec89b',
+  arsenic: '#424242',
+  azureishWhite: '#DADDF7',
+  midNightBlack: '#00000099',
+  charlestonGreen: '#232f34',
+  lotion: '#FAFAFA',
+  midDayWhite: '#FFFFFF90',
+  venetianRed: '#CC1512',
+  crimsonRed: '#9d0102',
+};

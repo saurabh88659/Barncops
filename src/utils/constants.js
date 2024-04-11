@@ -1,0 +1,5 @@
+
+export const CONSTANTS = {
+    TOKEN: 'TOKEN',
+    REFRESH_TOKEN: 'REFRESH_TOKEN'
+}
