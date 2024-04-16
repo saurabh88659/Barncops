@@ -12,7 +12,6 @@ const SplashScreens = ({navigation}) => {
 
   useEffect(() => {
     setTimeout(() => {
-      navigation.replace(routes.Login_Screens);
       checkLogin();
     }, 1000);
   }, []);

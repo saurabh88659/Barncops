@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   StatusBar,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {AppColors} from '../../assests/AppColors';
@@ -19,13 +20,46 @@ import {useSafeAreaFrame} from 'react-native-safe-area-context';
 import {routes} from '../../shells/routes';
 import Svg, {Path} from 'react-native-svg';
 import AppHeader from '../../components/AppHeader';
+import MapView, {Geojson, PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import IndiaJson from '../../assests/MapJson/India.json';
+import Carousel from 'react-native-snap-carousel';
+import {setOfflineData} from '../../network/commonServices';
+import {configureLayoutAnimationBatch} from 'react-native-reanimated/lib/typescript/reanimated2/core';
+import {centeredLatitudeAndLongitude} from '../../utils/centeredLatitudeAndLongitudeData';
 
 const HomeScreen = ({navigation}) => {
+  const disPatch = useDispatch();
+  const windowWidth = Dimensions.get('window').width;
+  const windowHeight = Dimensions.get('window').height;
   const states = useSelector(state => state.appData.states);
-  // const year = useSelector(state => state.appData.year);
+  const year = useSelector(state => state.appData.year);
+  console.log('year-----------', year);
+  // console.log('IndiaJson++++++++++++++++++++++++++++++++', IndiaJson.features);
   const [selectetdState, setSelectedState] = useState('');
   const [screenLoading, setScreenLoading] = useState('');
-  const disPatch = useDispatch();
+  const [filterJsonData, setFilteredData] = useState([]);
+  const [selectedShowStateName, setSelectedShowStateName] = useState('');
+  const [refresh, setRefresh] = useState(false);
+  const [initialRegion, setinitialRegion] = useState({
+    latitude: 20.5937,
+    longitude: 78.9629,
+    latitudeDelta: 30,
+    longitudeDelta: 30,
+  });
+
+  useEffect(() => {
+    if (selectetdState) {
+      setRefresh(!refresh);
+      setinitialRegion({
+        latitude: centeredLatitudeAndLongitude[selectetdState].latitude,
+        longitude: centeredLatitudeAndLongitude[selectetdState].longitude,
+        latitudeDelta:
+          centeredLatitudeAndLongitude[selectetdState].latitudeDelta,
+        longitudeDelta:
+          centeredLatitudeAndLongitude[selectetdState].longitudeDelta,
+      });
+    }
+  }, [selectetdState]);
 
   const indianStates = [
     {
@@ -120,12 +154,17 @@ const HomeScreen = ({navigation}) => {
     },
   ];
 
-  useEffect(() => {
-    handleGetState();
-    handleGetYear();
-  }, []);
+  // useEffect(() => {
+  //   console.log(
+  //     '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++useeffect runnrun run++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
+  //   );
+  //   handleGetState();
+  //   handleGetYear();
+  // }, []);
 
   useEffect(() => {
+    // ===================================================comment of f later=========================================
+    // setSelectedState('');
     setScreenLoading(true);
     Promise.all([handleGetState(), handleGetYear()])
       .then((res, rej) => {
@@ -139,14 +178,23 @@ const HomeScreen = ({navigation}) => {
 
   const handleGetState = async () => {
     const res = await getState();
+    // console.log(
+    //   're of get state===========================11111111111111',
+    //   res.data.data,
+    // );
     if (res.success) {
       disPatch(setStates(res.data.data));
     } else {
-      console.log('error of handleGetState------', res.success);
+      console.log('error of handleGetState------', res.data);
     }
   };
+
   const handleGetYear = async () => {
     const res = await getYear();
+    // console.log(
+    //   're of get year===========================222222222222222222222',
+    //   res.data.data,
+    // );
     if (res.success) {
       disPatch(setYear(res.data.data));
     } else {
@@ -154,9 +202,17 @@ const HomeScreen = ({navigation}) => {
     }
   };
 
-  // const indiaStateData = require('../../assests/MapJson/India.json');
-  // const {features} = indiaStateData;
-  // console.log('features-----------------------------', features);
+  const getFiteredJson = async (geojsonData, stateName) => {
+    const TestState = 'Uttarakhand';
+    setSelectedState(TestState);
+    const filteredFeatures = geojsonData.features.filter(
+      feature => feature.properties.st_name === TestState,
+    );
+    setFilteredData({
+      ...geojsonData,
+      features: filteredFeatures,
+    });
+  };
 
   return (
     <View style={{flex: 1, backgroundColor: AppColors.white}}>
@@ -173,16 +229,55 @@ const HomeScreen = ({navigation}) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{}}>
-          <View style={{marginTop: 20, paddingHorizontal: 15}}>
-            <Text style={styles.CardHeading}>
+          <View style={{paddingTop: 20, paddingHorizontal: 10}}>
+            <Carousel
+              autoplay
+              data={year}
+              sliderWidth={windowWidth - 20}
+              itemWidth={windowWidth / 3}
+              initialIndex={1} // Set the initial index to 1 (second item)
+              loop={true} // Set loop to true to continuously loop through items
+              renderItem={({item, index}) => (
+                <View style={{alignItems: 'center'}}>
+                  <View
+                    style={{
+                      height: 90,
+                      width: 90,
+                      backgroundColor: AppColors.white,
+                      borderWidth: 3,
+                      justifyContent: 'center',
+                      borderRadius: 100,
+                      borderColor: AppColors.primaryColor,
+                    }}>
+                    <Image
+                      style={{height: 80, width: 80}}
+                      resizeMode="contain"
+                      source={require('../../assests/images/IndiaMap.png')}
+                    />
+                  </View>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontSize: 18,
+                      color: AppColors.black,
+                    }}>
+                    {item.year}
+                  </Text>
+                </View>
+              )}
+            />
+          </View>
+
+          <View style={{marginTop: 15, paddingHorizontal: 15}}>
+            <Text style={[styles.CardHeading, {marginBottom: 10}]}>
               SPARLIAMENTARY GENERAL ELECTION RESULTS
             </Text>
             <AppDropDown
               height={80}
               data={states}
               onChange={item => {
-                //   console.log(item.state_name)
-                setSelectedState(item);
+                getFiteredJson(IndiaJson, item.state_name);
+                setSelectedState(item.state_name);
               }}
               value={selectetdState?.state_name}
               labelField="state_name"
@@ -191,6 +286,65 @@ const HomeScreen = ({navigation}) => {
               placeholder="--Select State--"
             />
           </View>
+
+          <TouchableOpacity
+            onPress={() => getFiteredJson(IndiaJson)}
+            style={{
+              height: 44,
+              width: '50%',
+              alignSelf: 'center',
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: AppColors.black,
+              marginVertical: 20,
+            }}>
+            <Text style={{color: AppColors.white}}>Apply</Text>
+          </TouchableOpacity>
+
+          {/* map======================== */}
+          <View
+            style={{
+              height: 500,
+              width: '100%',
+              backgroundColor: AppColors.white,
+              paddingHorizontal: 15,
+              paddingVertical: 15,
+            }}>
+            <MapView
+              key={refresh}
+              mapType={'none'}
+              customMapStyle={[]}
+              provider={PROVIDER_GOOGLE}
+              zoomControlEnabled={true}
+              style={{
+                height: '100%',
+                width: '100%',
+                backgroundColor: 'transparent',
+              }}
+              initialRegion={initialRegion}>
+              {selectetdState
+                ? filterJsonData && (
+                    <Geojson
+                      geojson={filterJsonData}
+                      strokeColor={AppColors.black}
+                      fillColor={AppColors.primaryColor}
+                      strokeWidth={0.5}
+                      zIndex={9999}
+                    />
+                  )
+                : selectetdState == '' && (
+                    <Geojson
+                      geojson={IndiaJson}
+                      strokeColor={AppColors.black}
+                      fillColor={AppColors.primaryColor}
+                      strokeWidth={0.5}
+                      zIndex={9999}
+                    />
+                  )}
+            </MapView>
+          </View>
+          {/* map======================== */}
+
           <View style={styles.stateCardContainer}>
             <Text style={styles.CardHeading}>
               GENERAL PARLIAMENT (LOK SABHA) & STATE LEGISLATIVE ASSEMBLY
@@ -229,7 +383,6 @@ const HomeScreen = ({navigation}) => {
               })}
             </View>
           </View>
-
           <View style={styles.unionTerritoriesCardContainer}>
             <Text style={styles.CardHeading}>UNION TERRITPRIES</Text>
             <View style={styles.cardRow}>

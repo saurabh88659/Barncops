@@ -43,7 +43,6 @@ const SignUpScreen = ({navigation}) => {
     const res = await signup(data);
     if (res.success) {
       setButtonLoading(false);
-
       Toast.show('Account Created Successfully!', Toast.BOTTOM, Toast.LONG);
       navigation.navigate(routes.Login_Screens);
     } else {
@@ -80,6 +79,7 @@ const SignUpScreen = ({navigation}) => {
           <Text
             style={{
               fontSize: 30,
+
               color: AppColors.black,
               fontWeight: '800',
               alignSelf: 'center',
