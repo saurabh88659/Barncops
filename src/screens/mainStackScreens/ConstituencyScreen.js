@@ -632,7 +632,6 @@ const ConstituencyScreen = ({navigation, route}) => {
                     </Text>
                   </View>
                 )}
-
                 {upaData && (
                   <View
                     style={{
@@ -822,9 +821,10 @@ const ConstituencyScreen = ({navigation, route}) => {
                     <Text
                       style={{
                         fontWeight: 'bold',
-                        width: 200,
+                        width: 250,
                         textAlign: 'center',
                         color: AppColors.white,
+                        // backgroundColor: 'green',
                       }}>
                       AC NAME
                     </Text>
@@ -834,9 +834,11 @@ const ConstituencyScreen = ({navigation, route}) => {
                         width: 40,
                         textAlign: 'center',
                         color: AppColors.white,
+                        // backgroundColor: 'red',
                       }}>
                       NO
                     </Text>
+
                     <Text
                       style={{
                         fontWeight: 'bold',
@@ -846,6 +848,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                       }}>
                       TYPE
                     </Text>
+
                     <Text
                       style={{
                         fontWeight: 'bold',
@@ -855,10 +858,35 @@ const ConstituencyScreen = ({navigation, route}) => {
                       }}>
                       STATE
                     </Text>
+
+                    {/* 1==new added */}
                     <Text
                       style={{
                         fontWeight: 'bold',
-                        width: 200,
+                        width: 150,
+                        textAlign: 'center',
+                        color: AppColors.white,
+                      }}>
+                      DISTRICT
+                    </Text>
+                    {/* new added */}
+
+                    {/*2== new added */}
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        width: 150,
+                        textAlign: 'center',
+                        color: AppColors.white,
+                      }}>
+                      SUB REGION
+                    </Text>
+                    {/* new added */}
+
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        width: 250,
                         textAlign: 'center',
                         color: AppColors.white,
                       }}>
@@ -873,6 +901,54 @@ const ConstituencyScreen = ({navigation, route}) => {
                       }}>
                       PARTY
                     </Text>
+
+                    {/*3== new added */}
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        width: 80,
+                        textAlign: 'center',
+                        color: AppColors.white,
+                      }}>
+                      AGE
+                    </Text>
+                    {/* new added */}
+
+                    {/*4== new added */}
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        width: 80,
+                        textAlign: 'center',
+                        color: AppColors.white,
+                      }}>
+                      GENDER
+                    </Text>
+                    {/* new added */}
+                    {/*5== new added */}
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        width: 150,
+                        textAlign: 'center',
+                        color: AppColors.white,
+                      }}>
+                      EDUCATION
+                    </Text>
+                    {/* new added */}
+
+                    {/*6== new added */}
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        width: 150,
+                        textAlign: 'center',
+                        color: AppColors.white,
+                      }}>
+                      PROFESSION
+                    </Text>
+                    {/* new added */}
+
                     <Text
                       style={{
                         fontWeight: 'bold',
@@ -885,7 +961,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                     <Text
                       style={{
                         fontWeight: 'bold',
-                        width: 150,
+                        width: 110,
                         textAlign: 'center',
                         color: AppColors.white,
                       }}>
@@ -923,22 +999,24 @@ const ConstituencyScreen = ({navigation, route}) => {
                   <View>
                     {allPcNameTableData &&
                       allPcNameTableData.map((item, index) => {
+                        console.log('item>>>>>>>>>>>>>>', item);
                         return (
                           <View
                             style={{
                               flexDirection: 'row',
-                              justifyContent: 'space-between',
+                              // justifyContent: 'space-between',
                               marginBottom: 15,
                               paddingVertical: 10,
                             }}>
                             <Text
                               style={{
                                 fontWeight: 'bold',
-                                width: 200,
+                                width: 250,
                                 textAlign: 'center',
                                 color: AppColors.black,
+                                // backgroundColor: 'green',
                               }}>
-                              {item.constituency_name}
+                              {item?.constituency_name}
                             </Text>
                             <Text
                               style={{
@@ -946,8 +1024,12 @@ const ConstituencyScreen = ({navigation, route}) => {
                                 width: 40,
                                 textAlign: 'center',
                                 color: AppColors.black,
+                                // backgroundColor: 'red',
                               }}>
-                              {item.constituency_no}
+                              {item.constituency_no?.replace(
+                                /(\d+)\.0\b/g,
+                                '$1',
+                              )}
                             </Text>
                             <Text
                               style={{
@@ -956,7 +1038,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                                 textAlign: 'center',
                                 color: AppColors.black,
                               }}>
-                              {item.candidate_Type}
+                              {item.candidate_Type || '-'}
                             </Text>
                             <Text
                               style={{
@@ -965,12 +1047,31 @@ const ConstituencyScreen = ({navigation, route}) => {
                                 textAlign: 'center',
                                 color: AppColors.black,
                               }}>
-                              {item.state_name}
+                              {item?.state_name}
                             </Text>
                             <Text
                               style={{
                                 fontWeight: 'bold',
-                                width: 200,
+                                width: 150,
+                                textAlign: 'center',
+                                color: AppColors.black,
+                              }}>
+                              {/* {item.state_name} */}-{/* district */}
+                            </Text>
+                            <Text
+                              style={{
+                                fontWeight: 'bold',
+                                width: 150,
+                                textAlign: 'center',
+                                color: AppColors.black,
+                              }}>
+                              {/* {item.state_name} */}-{/* SubRegion */}
+                            </Text>
+
+                            <Text
+                              style={{
+                                fontWeight: 'bold',
+                                width: 250,
                                 textAlign: 'center',
                                 color: AppColors.black,
                               }}>
@@ -985,6 +1086,49 @@ const ConstituencyScreen = ({navigation, route}) => {
                               }}>
                               {item.party}
                             </Text>
+
+                            <Text
+                              style={{
+                                fontWeight: 'bold',
+                                width: 80,
+                                textAlign: 'center',
+                                color: AppColors.black,
+                              }}>
+                              {item?.age || '-'}
+                              {/* age */}
+                            </Text>
+                            <Text
+                              style={{
+                                fontWeight: 'bold',
+                                width: 80,
+                                textAlign: 'center',
+                                color: AppColors.black,
+                              }}>
+                              {item?.sex}
+                              {/* gender */}
+                            </Text>
+
+                            <Text
+                              style={{
+                                fontWeight: 'bold',
+                                width: 150,
+                                textAlign: 'center',
+                                color: AppColors.black,
+                              }}>
+                              {item?.education}
+                              {/* EDUCATION */}
+                            </Text>
+                            <Text
+                              style={{
+                                fontWeight: 'bold',
+                                width: 150,
+                                textAlign: 'center',
+                                color: AppColors.black,
+                              }}>
+                              {item?.prof_main}
+                              PROFFESION
+                            </Text>
+
                             <Text
                               style={{
                                 fontWeight: 'bold',
@@ -997,7 +1141,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                             <Text
                               style={{
                                 fontWeight: 'bold',
-                                width: 150,
+                                width: 110,
                                 textAlign: 'center',
                                 color: AppColors.black,
                               }}>

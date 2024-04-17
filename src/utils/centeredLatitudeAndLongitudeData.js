@@ -1,17 +1,20 @@
 export const centeredLatitudeAndLongitude = {
-  'Andaman & Nicobar': {
+  // edited
+  'Andaman_&_Nicobar_Islands': {
     latitude: 11.7401,
     longitude: 92.6586,
     latitudeDelta: 5,
     longitudeDelta: 5,
   },
-  'Andhra Pradesh': {
+  //edit
+  Andhra_Pradesh: {
     latitude: 15.9129,
     longitude: 79.74,
     latitudeDelta: 10,
     longitudeDelta: 10,
   },
-  'Arunachal Pradesh': {
+  //edited
+  Arunachal_Pradesh: {
     latitude: 28.218,
     longitude: 94.7278,
     latitudeDelta: 7,
@@ -29,13 +32,15 @@ export const centeredLatitudeAndLongitude = {
     latitudeDelta: 7,
     longitudeDelta: 7,
   },
-  'Daman & Diu': {
+
+  //edit
+  'Daman_&_Diu': {
     latitude: 20.7144,
     longitude: 72.8663,
     latitudeDelta: 1,
     longitudeDelta: 1,
   },
-  Orissa: {
+  Odisha: {
     latitude: 20.9517,
     longitude: 85.0985,
     latitudeDelta: 8,
@@ -47,7 +52,8 @@ export const centeredLatitudeAndLongitude = {
     latitudeDelta: 8,
     longitudeDelta: 8,
   },
-  'Dadra & Nagar Haveli': {
+  //edit
+  'Dadra_&_Nagar_Haveli': {
     latitude: 20.1809,
     longitude: 73.0169,
     latitudeDelta: 1,
@@ -59,12 +65,18 @@ export const centeredLatitudeAndLongitude = {
     latitudeDelta: 1,
     longitudeDelta: 1,
   },
-  Goa: {
+  'Goa_Daman_&_Diu': {
     latitude: 15.2993,
     longitude: 74.124,
     latitudeDelta: 1,
     longitudeDelta: 1,
   },
+  // 'Goa_Daman_&_Diu': {
+  //   latitude: 15.2993,
+  //   longitude: 74.124,
+  //   latitudeDelta: 1,
+  //   longitudeDelta: 1,
+  // },
   Gujarat: {
     latitude: 22.2587,
     longitude: 71.1924,
@@ -77,13 +89,14 @@ export const centeredLatitudeAndLongitude = {
     latitudeDelta: 5,
     longitudeDelta: 5,
   },
-  'Himachal Pradesh': {
+  Himachal_Pradesh: {
     latitude: 31.1048,
     longitude: 77.1734,
     latitudeDelta: 4,
     longitudeDelta: 4,
   },
-  'Jammu & Kashmir': {
+  //edited
+  'Jammu_&_Kashmir': {
     latitude: 33.7782,
     longitude: 76.5762,
     latitudeDelta: 10,
@@ -119,7 +132,7 @@ export const centeredLatitudeAndLongitude = {
     latitudeDelta: 1,
     longitudeDelta: 1,
   },
-  'Madhya Pradesh': {
+  Madhya_Pradesh: {
     latitude: 22.9734,
     longitude: 78.6569,
     latitudeDelta: 10,
@@ -180,7 +193,8 @@ export const centeredLatitudeAndLongitude = {
     latitudeDelta: 2,
     longitudeDelta: 2,
   },
-  'Tamil Nadu': {
+  //edited
+  Tamil_Nadu: {
     latitude: 11.1271,
     longitude: 78.6569,
     latitudeDelta: 6,
@@ -198,7 +212,7 @@ export const centeredLatitudeAndLongitude = {
     latitudeDelta: 2,
     longitudeDelta: 2,
   },
-  'Uttar Pradesh': {
+  Uttar_Pradesh: {
     latitude: 26.8467,
     longitude: 80.9462,
     latitudeDelta: 10,
@@ -211,7 +225,21 @@ export const centeredLatitudeAndLongitude = {
     latitudeDelta: 4,
     longitudeDelta: 4,
   },
-  'West Bengal': {
+  West_Bengal: {
+    latitude: 22.9868,
+    longitude: 87.855,
+    latitudeDelta: 6,
+    longitudeDelta: 6,
+  },
+  //new
+  Madras: {
+    latitude: 22.9868,
+    longitude: 87.855,
+    latitudeDelta: 6,
+    longitudeDelta: 6,
+  },
+  //new
+  Mysore: {
     latitude: 22.9868,
     longitude: 87.855,
     latitudeDelta: 6,

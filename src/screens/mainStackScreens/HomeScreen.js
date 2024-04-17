@@ -34,7 +34,7 @@ const HomeScreen = ({navigation}) => {
   const states = useSelector(state => state.appData.states);
   const year = useSelector(state => state.appData.year);
   console.log('year-----------', year);
-  // console.log('IndiaJson++++++++++++++++++++++++++++++++', IndiaJson.features);
+  console.log('states++++++++++++++++++++++++++++++++', states);
   const [selectetdState, setSelectedState] = useState('');
   const [screenLoading, setScreenLoading] = useState('');
   const [filterJsonData, setFilteredData] = useState([]);
@@ -48,15 +48,16 @@ const HomeScreen = ({navigation}) => {
   });
 
   useEffect(() => {
-    if (selectetdState) {
+    //changes
+    if (selectetdState && centeredLatitudeAndLongitude[selectetdState]) {
       setRefresh(!refresh);
       setinitialRegion({
-        latitude: centeredLatitudeAndLongitude[selectetdState].latitude,
-        longitude: centeredLatitudeAndLongitude[selectetdState].longitude,
+        latitude: centeredLatitudeAndLongitude[selectetdState]?.latitude,
+        longitude: centeredLatitudeAndLongitude[selectetdState]?.longitude,
         latitudeDelta:
-          centeredLatitudeAndLongitude[selectetdState].latitudeDelta,
+          centeredLatitudeAndLongitude[selectetdState]?.latitudeDelta,
         longitudeDelta:
-          centeredLatitudeAndLongitude[selectetdState].longitudeDelta,
+          centeredLatitudeAndLongitude[selectetdState]?.longitudeDelta,
       });
     }
   }, [selectetdState]);
@@ -196,17 +197,22 @@ const HomeScreen = ({navigation}) => {
     //   res.data.data,
     // );
     if (res.success) {
-      disPatch(setYear(res.data.data));
+      const formattedYears = res.data.data.map(item => ({
+        ...item,
+        // year: parseInt(item.year),
+        year: isNaN(parseInt(item.year)) ? null : parseInt(item.year),
+      }));
+      disPatch(setYear(formattedYears));
+      // disPatch(setYear(res.data.data));
     } else {
       console.log('error of handleGetYear------', res.success);
     }
   };
 
   const getFiteredJson = async (geojsonData, stateName) => {
-    const TestState = 'Uttarakhand';
-    setSelectedState(TestState);
+    // setSelectedState(TestState);
     const filteredFeatures = geojsonData.features.filter(
-      feature => feature.properties.st_name === TestState,
+      feature => feature.properties.st_name === stateName,
     );
     setFilteredData({
       ...geojsonData,
@@ -261,13 +267,12 @@ const HomeScreen = ({navigation}) => {
                       fontSize: 18,
                       color: AppColors.black,
                     }}>
-                    {item.year}
+                    {item?.year}
                   </Text>
                 </View>
               )}
             />
           </View>
-
           <View style={{marginTop: 15, paddingHorizontal: 15}}>
             <Text style={[styles.CardHeading, {marginBottom: 10}]}>
               SPARLIAMENTARY GENERAL ELECTION RESULTS
