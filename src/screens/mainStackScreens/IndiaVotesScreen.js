@@ -15,6 +15,7 @@ import {
   getPartyAndCandidateData,
   getPartyData,
 } from '../../network/networkRequest/mainApiRequest';
+import { BarChart, PieChart } from 'react-native-gifted-charts';
 
 const IndiaVotesScreen = ({navigation, route}) => {
   const constituency_name = route.params.constituency_name;
@@ -96,6 +97,47 @@ const IndiaVotesScreen = ({navigation, route}) => {
       console.log('error of handleGetPartyAndCandidateDta');
     }
   };
+
+  const PieChartColors = [
+    '#177AD5',
+    '#79D2DE',
+    '#ED6665',
+    '#F4B400',
+    '#06A77D',
+    '#B83A87',
+  ];
+
+  //1st grapth data[-------------------------------------------------------]
+  const pieDatavotes = patryData.slice(0, 6)?.map((party, index) => {
+    return {
+      value: party?.Total_Votes,
+      color: PieChartColors[index],
+      text: `${party?.Vote_Percentage.toFixed(2)}%`,
+    };
+  });
+
+  const pieDatavotes1 = patryData.slice(0, 6)?.map((party, index) => {
+    return {
+      value: party?.Total_Seats,
+      frontColor: PieChartColors[index],
+      text: party?.Total_Seats,
+      label: party?.Party_Name,
+      topLabelComponent: () => (
+        <Text style={{color: AppColors.black, fontSize: 16, marginBottom: 4}}>
+          {party?.Total_Seats}
+        </Text>
+      ),
+    };
+  });
+
+  const DotVotesDatas = patryData.slice(0, 6)?.map((party, index) => {
+    return {
+      Partyname: party?.Party_Name,
+      totalVotes: party?.Total_Votes,
+      color: PieChartColors[index],
+      votesPercentage: `${party?.Vote_Percentage.toFixed(2)}%`,
+    };
+  });
 
   const TableKeyVauePair = ({tablekey, value}) => {
     return (
@@ -396,8 +438,110 @@ const IndiaVotesScreen = ({navigation, route}) => {
                 </View>
               </ScrollView>
             )}
-
-            {candidateDataKeys.length > 0 && (
+            <View
+              style={{
+                backgroundColor: AppColors.white,
+                elevation: 5,
+                alignItems: 'center',
+                paddingVertical: 20,
+                width: '100%',
+                borderRadius: 6,
+              }}>
+              <>
+                {DotVotesDatas && DotVotesDatas.length > 0 && (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      justifyContent: 'space-between',
+                      paddingHorizontal: 10,
+                      marginBottom: 20,
+                    }}>
+                    {DotVotesDatas.map((item, index) => {
+                      return (
+                        <View
+                          style={{
+                            justifyContent: 'center',
+                            marginBottom: 10,
+                          }}>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              width: 120,
+                              marginRight: 20,
+                            }}>
+                            <View
+                              style={{
+                                height: 10,
+                                width: 30,
+                                borderRadius: 1,
+                                backgroundColor: item.color,
+                                marginRight: 5,
+                              }}
+                            />
+                            <Text style={{color: AppColors.black, width: 50}}>
+                              {item.Partyname}
+                            </Text>
+                            <Text
+                              style={{color: AppColors.black, marginLeft: 10}}>
+                              {item.votesPercentage}
+                            </Text>
+                          </View>
+                        </View>
+                      );
+                    })}
+                  </View>
+                )}
+                {pieDatavotes.length > 0 && (
+                  <PieChart
+                    isAnimated={true}
+                    animationDuration={1}
+                    // showText
+                    textColor="black"
+                    shadowWidth={2}
+                    shadow={'red'}
+                    radius={150}
+                    textSize={15}
+                    textBackgroundRadius={26}
+                    data={pieDatavotes}
+                    showValuesAsLabels
+                  />
+                )}
+                <Text
+                  style={{color: AppColors.black, marginTop: 10, fontSize: 17}}>
+                  Total Votes
+                </Text>
+              </>
+              <View
+                style={{
+                  marginTop: 30,
+                  alignItems: 'center',
+                }}>
+                {pieDatavotes1 && pieDatavotes1.length > 0 && (
+                  <BarChart
+                    height={300}
+                    textColor="black"
+                    shadowWidth={2}
+                    shadow={'red'}
+                    textSize={15}
+                    barColor={'black'}
+                    data={pieDatavotes1}
+                    yAxisTextStyle={{color: 'black'}}
+                    xAxisLabelTextStyle={{color: 'black', fontSize: 13}}
+                  />
+                )}
+                <Text
+                  style={{
+                    color: AppColors.black,
+                    marginTop: 10,
+                    fontSize: 17,
+                  }}>
+                  Total Seats
+                </Text>
+              </View>
+            </View>
+            {/* {candidateDataKeys.length > 0 && (
               <ScrollView
                 nestedScrollEnabled={true}
                 style={{}}
@@ -487,7 +631,138 @@ const IndiaVotesScreen = ({navigation, route}) => {
                   />
                 </View>
               </ScrollView>
-            )}
+            )} */}
+            <ScrollView nestedScrollEnabled={true} horizontal={false}>
+                  {Object.keys(candidateData).map(constituency => (
+                    <View key={constituency} style={{ backgroundColor: '#fff', elevation: 2, padding: 10 }}>
+                      <Text style={{
+                                fontSize:18,
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                                color: AppColors.black,
+                              }}>{constituency}</Text>
+                      <Text style={{
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                                color: AppColors.black,
+                              }}>Total Votes: {candidateData[constituency]['Total Votes']}</Text>
+                      <ScrollView horizontal contentContainerStyle={{}}>
+                <View
+                  style={{
+                    // padding: 10,
+                    backgroundColor: AppColors.white,
+                    paddingBottom: 20,
+                    elevation: 6,
+                    paddingTop: 10,
+                  }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      marginBottom: 15,
+                      backgroundColor: '#000',
+                      paddingVertical: 10,
+                    }}>
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        width: 250,
+                        textAlign: 'center',
+                        color: AppColors.white,
+                        // backgroundColor: 'green',
+                      }}>
+                      CANDIDATE NAME
+                    </Text>
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        width: 100,
+                        textAlign: 'center',
+                        color: AppColors.white,
+                        // backgroundColor: 'red',
+                      }}>
+                      PARTY NAME
+                    </Text>
+
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        width: 100,
+                        textAlign: 'center',
+                        color: AppColors.white,
+                      }}>
+                      VOTES
+                    </Text>
+
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        width: 150,
+                        textAlign: 'center',
+                        color: AppColors.white,
+                      }}>
+                      VOTES PERCENTAGE
+                    </Text>
+                    </View>
+                    <View>
+                    {candidateData &&
+                      candidateData[constituency].Candidates.map((item, index) => {
+                        console.log('item>>>>>>>>>>>>>>', item);
+                        return (
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              // justifyContent: 'space-between',
+                              marginBottom: 15,
+                              paddingVertical: 10,
+                            }}>
+                            <Text
+                              style={{
+                                fontWeight: 'bold',
+                                width: 250,
+                                textAlign: 'center',
+                                color: AppColors.black,
+                              }}>
+                              {item['Candidate Name'] || '-'}
+                            </Text>
+                            <Text
+                              style={{
+                                fontWeight: 'bold',
+                                width: 100,
+                                textAlign: 'center',
+                                color: AppColors.black,
+                              }}>
+                              {item['Party Name'] || '-'}
+                            </Text>
+                            <Text
+                              style={{
+                                fontWeight: 'bold',
+                                width: 100,
+                                textAlign: 'center',
+                                color: AppColors.black,
+                              }}>
+                              
+                              {item['Votes'] || '-'}
+                            </Text>
+                            <Text
+                              style={{
+                                fontWeight: 'bold',
+                                width: 150,
+                                textAlign: 'center',
+                                color: AppColors.black,
+                              }}>
+                              
+                              {item['Vote Percentage'] || '-'}
+                            </Text>
+                          </View>
+                        );
+                      })}
+                  </View>
+                  </View>
+                  </ScrollView>
+                    </View>
+                  ))}
+                </ScrollView>
           </ScrollView>
         </View>
       )}

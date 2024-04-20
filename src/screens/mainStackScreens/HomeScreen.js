@@ -275,6 +275,13 @@ const HomeScreen = ({navigation}) => {
                     // onPress={() => {
                     //   console.log(item), setSelectedYear(item);
                     // }}
+                    onPress={() => {
+                      navigation.navigate(routes.Constituency_Screen, {
+                        state: 'Uttar_Pradesh',
+                        year: item.year,
+                      });
+                      console.log(item), setSelectedYear(item);
+                    }}
                     style={{
                       height: 90,
                       width: 90,

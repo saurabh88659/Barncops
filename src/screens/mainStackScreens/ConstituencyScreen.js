@@ -154,7 +154,7 @@ const ConstituencyScreen = ({navigation, route}) => {
   };
 
   const handlegetAllPcNameDataTable = async () => {
-    const data = {year: selectetYear, state: state};
+    const data = {year: selectetYear, state: state,id: Constituency};
     const res = await getAllPcNameDataTable(data);
     // console.log(
     //   'res of handlegetAllPcNameDataTable--------%%%%%%%%%%%%%%%%% ',
@@ -347,7 +347,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                 alignSelf: 'center',
                 marginVertical: 20,
               }}>
-              {state}
+              {state.replace("_"," ")}
             </Text>
 
             {/* <Text
@@ -1063,7 +1063,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                             }}>
                             <TouchableOpacity
                               onPress={() =>
-                                navigation.navigate(routes.IndiaVotes_Screen, {
+                                navigation.navigate(routes.PCIndiaVotes_Screen, {
                                   constituency_name: item?.constituency_name,
                                   year: selectetYear,
                                   state: state,
@@ -1121,7 +1121,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                                 color: AppColors.black,
                               }}>
                               {/* {item.state_name} */}-{/* district */}
-                              {item?.district.replace((/_/g, " "))}
+                              {item.district?.replace((/_/g, " "))}
                             </Text>
                             <Text
                               style={{
@@ -1131,7 +1131,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                                 color: AppColors.black,
                               }}>
                               {/* {item.state_name} */}-{/* SubRegion */}
-                              {item?.sub_region.replace((/_/g, " "))}
+                              {item.sub_region?.replace((/_/g, " "))}
                             </Text>
 
                             <Text

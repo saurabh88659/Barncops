@@ -7,6 +7,7 @@ import ConstituencyScreen from '../screens/mainStackScreens/ConstituencyScreen';
 import {routes} from './routes';
 import DrawerStack from './DrawerStack';
 import IndiaVotesScreen from '../screens/mainStackScreens/IndiaVotesScreen';
+import PCIndiaVotesScreen from '../screens/mainStackScreens/PCIndiaVotesScreen';
 
 const MainStack = () => {
   const Stack = createNativeStackNavigator();
@@ -21,6 +22,10 @@ const MainStack = () => {
       <Stack.Screen
         name={routes.Constituency_Screen}
         component={ConstituencyScreen}
+      />
+      <Stack.Screen
+        name={routes.PCIndiaVotes_Screen}
+        component={PCIndiaVotesScreen}
       />
       <Stack.Screen
         name={routes.IndiaVotes_Screen}

@@ -12,5 +12,6 @@ export const routes = {
   Home_Screen: 'HomeScreen',
   Election_Oveview_Screen: 'ElectionOveviewScreen',
   Constituency_Screen: 'ConstituencyScreen',
+  PCIndiaVotes_Screen: 'PCIndiaVotesScreen',
   IndiaVotes_Screen: 'IndiaVotesScreen',
 };
