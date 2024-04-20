@@ -1111,7 +1111,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                                 textAlign: 'center',
                                 color: AppColors.black,
                               }}>
-                              {item?.state_name}
+                              {item?.state_name.replace((/_/g, " "))}
                             </Text>
                             <Text
                               style={{
@@ -1121,6 +1121,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                                 color: AppColors.black,
                               }}>
                               {/* {item.state_name} */}-{/* district */}
+                              {item?.district.replace((/_/g, " "))}
                             </Text>
                             <Text
                               style={{
@@ -1130,6 +1131,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                                 color: AppColors.black,
                               }}>
                               {/* {item.state_name} */}-{/* SubRegion */}
+                              {item?.sub_region.replace((/_/g, " "))}
                             </Text>
 
                             <Text
@@ -1168,7 +1170,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                                 textAlign: 'center',
                                 color: AppColors.black,
                               }}>
-                              {item?.sex}
+                              {item?.sex||item?.gender}
                               {/* gender */}
                             </Text>
 
@@ -1189,8 +1191,8 @@ const ConstituencyScreen = ({navigation, route}) => {
                                 textAlign: 'center',
                                 color: AppColors.black,
                               }}>
-                              {item?.prof_main}
-                              PROFFESION
+                              {item?.prof_main||item?.profession}
+                              {/* PROFFESION */}
                             </Text>
 
                             <Text
