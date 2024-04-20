@@ -34,8 +34,12 @@ const HomeScreen = ({navigation}) => {
   const states = useSelector(state => state.appData.states);
   const year = useSelector(state => state.appData.year);
   console.log('year-----------', year);
-  console.log('states++++++++++++++++++++++++++++++++', states);
+  console.log(
+    'states++++++++++++++++++++++++++++++++((((((((((((((((((((((((99999999999999999',
+    states,
+  );
   const [selectetdState, setSelectedState] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
   const [screenLoading, setScreenLoading] = useState('');
   const [filterJsonData, setFilteredData] = useState([]);
   const [selectedShowStateName, setSelectedShowStateName] = useState('');
@@ -46,6 +50,7 @@ const HomeScreen = ({navigation}) => {
     latitudeDelta: 30,
     longitudeDelta: 30,
   });
+  const [pcData, setPcData] = useState('');
 
   useEffect(() => {
     //changes
@@ -65,6 +70,7 @@ const HomeScreen = ({navigation}) => {
   const indianStates = [
     {
       state: 'Andhra Pradesh',
+
       image: require('../../assests/images/Maps/IN-AP.png'),
     },
     {
@@ -179,10 +185,10 @@ const HomeScreen = ({navigation}) => {
 
   const handleGetState = async () => {
     const res = await getState();
-    // console.log(
-    //   're of get state===========================11111111111111',
-    //   res.data.data,
-    // );
+    console.log(
+      're of get state===========================11111111111111',
+      res.data.data,
+    );
     if (res.success) {
       disPatch(setStates(res.data.data));
     } else {
@@ -220,6 +226,26 @@ const HomeScreen = ({navigation}) => {
     });
   };
 
+  // useEffect(() => {
+  //   hanldeGetPcName();
+  // }, [selectedYear, selectetdState]);
+  // const hanldeGetPcName = async () => {
+  //   const object = {
+  //     state_name: selectetdState,
+  //     year: selectedYear?.year,
+  //   };
+  //   console.log('object-----', object);
+  //   if (selectetdState && selectedYear) {
+  //     console.log('hello working logic');
+  //     const res = await getPcName();
+  //     if (res.success) {
+  //       setPcData(res.data.data);
+  //     } else {
+  //       setPcData('');
+  //     }
+  //   }
+  // };
+
   return (
     <View style={{flex: 1, backgroundColor: AppColors.white}}>
       <StatusBar
@@ -237,22 +263,25 @@ const HomeScreen = ({navigation}) => {
           contentContainerStyle={{}}>
           <View style={{paddingTop: 20, paddingHorizontal: 10}}>
             <Carousel
-              autoplay
+              // autoplay
               data={year}
               sliderWidth={windowWidth - 20}
               itemWidth={windowWidth / 3}
-              initialIndex={1} // Set the initial index to 1 (second item)
-              loop={true} // Set loop to true to continuously loop through items
+              initialIndex={1}
+              loop={true}
               renderItem={({item, index}) => (
                 <View style={{alignItems: 'center'}}>
-                  <View
+                  <TouchableOpacity
+                    // onPress={() => {
+                    //   console.log(item), setSelectedYear(item);
+                    // }}
                     style={{
                       height: 90,
                       width: 90,
                       backgroundColor: AppColors.white,
                       borderWidth: 3,
                       justifyContent: 'center',
-                      borderRadius: 100,
+                      borderRadius: 90 / 2,
                       borderColor: AppColors.primaryColor,
                     }}>
                     <Image
@@ -260,7 +289,7 @@ const HomeScreen = ({navigation}) => {
                       resizeMode="contain"
                       source={require('../../assests/images/IndiaMap.png')}
                     />
-                  </View>
+                  </TouchableOpacity>
                   <Text
                     style={{
                       textAlign: 'center',
@@ -273,6 +302,7 @@ const HomeScreen = ({navigation}) => {
               )}
             />
           </View>
+
           <View style={{marginTop: 15, paddingHorizontal: 15}}>
             <Text style={[styles.CardHeading, {marginBottom: 10}]}>
               SPARLIAMENTARY GENERAL ELECTION RESULTS
@@ -305,7 +335,6 @@ const HomeScreen = ({navigation}) => {
             }}>
             <Text style={{color: AppColors.white}}>Apply</Text>
           </TouchableOpacity>
-
           {/* map======================== */}
           <View
             style={{
@@ -348,6 +377,53 @@ const HomeScreen = ({navigation}) => {
                   )}
             </MapView>
           </View>
+          {selectetdState && (
+            <View style={{paddingTop: 20, paddingHorizontal: 10}}>
+              <Carousel
+                // autoplay
+                data={year}
+                sliderWidth={windowWidth - 20}
+                itemWidth={windowWidth / 3}
+                initialIndex={1}
+                loop={true}
+                renderItem={({item, index}) => (
+                  <View style={{alignItems: 'center'}}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate(routes.Constituency_Screen, {
+                          state: selectetdState,
+                          year: item.year,
+                        });
+                        console.log(item), setSelectedYear(item);
+                      }}
+                      style={{
+                        height: 80,
+                        width: 80,
+                        backgroundColor: AppColors.white,
+                        borderWidth: 3,
+                        justifyContent: 'center',
+                        borderRadius: 90 / 2,
+                        borderColor: AppColors.primaryColor,
+                      }}>
+                      <Image
+                        style={{height: 70, width: 70}}
+                        resizeMode="contain"
+                        source={require('../../assests/images/IndiaMap.png')}
+                      />
+                    </TouchableOpacity>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        fontSize: 18,
+                        color: AppColors.black,
+                      }}>
+                      {item?.year}
+                    </Text>
+                  </View>
+                )}
+              />
+            </View>
+          )}
           {/* map======================== */}
 
           <View style={styles.stateCardContainer}>
@@ -357,11 +433,12 @@ const HomeScreen = ({navigation}) => {
             </Text>
             <View style={styles.cardRow}>
               {indianStates.map((item, index) => {
+                console.log('item');
                 return (
                   <TouchableOpacity
                     onPress={() =>
                       navigation.navigate(routes.Constituency_Screen, {
-                        data: item,
+                        state: item.state,
                       })
                     }
                     key={index}
@@ -396,7 +473,7 @@ const HomeScreen = ({navigation}) => {
                   <TouchableOpacity
                     onPress={() =>
                       navigation.navigate(routes.Constituency_Screen, {
-                        data: item,
+                        state: item.state,
                       })
                     }
                     key={index}

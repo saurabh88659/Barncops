@@ -8,6 +8,7 @@ import {
   Modal,
   TextInput,
   ActivityIndicator,
+  Touchable,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {AppColors} from '../../assests/AppColors';
@@ -31,14 +32,28 @@ import AppHeader from '../../components/AppHeader';
 import AppTextInputWithLabel from '../../components/AppTextInputWithLabel';
 import {Icon} from '../../components/AppIcon';
 import AppTextInpuWithoutIcon from '../../components/AppTextInpuWithoutIcon';
+import {routes} from '../../shells/routes';
 
 const ConstituencyScreen = ({navigation, route}) => {
   const year = useSelector(state => state.appData.year);
-  console.log(year);
-  const item = route.params.data;
-  console.log('item----------------', item);
-  const [selectetYear, setSelectedYear] = useState('2019');
-  console.log('selected year', selectetYear);
+  console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@year===============>>>', year);
+  const yearRoute = route.params.year;
+
+  // console.log(year);
+  const state = route.params.state;
+  console.log(
+    'state ##############################################################@@@@@@@2222222222222222222222222222222222222=============22',
+    state,
+  );
+  const [selectetYear, setSelectedYear] = useState(yearRoute || 2019);
+  // const [selectetYear, setSelectedYear] = useState(2019);
+
+  console.log(
+    'year########################################################11111111111111111111111111111111111111111111',
+    selectetYear,
+  );
+  // console.log('selected year', selectetYear);
+
   const [Constituency, setConstituency] = useState('1');
   const [electorsData, setElectorsData] = useState('');
   const [allPartyData, setAllPartyData] = useState([]);
@@ -82,10 +97,10 @@ const ConstituencyScreen = ({navigation, route}) => {
     // handleGetUpaAllianceData();
     // handlegetAllPcNameDataTable();
     // setScreenLoading(false);
-  }, [Constituency, item, selectetYear]);
+  }, [Constituency, state, selectetYear]);
 
   const handleGetConstituencyElectorsData = async () => {
-    const data = {year: selectetYear, state: item?.state, id: Constituency};
+    const data = {year: selectetYear, state: state, id: Constituency};
     const res = await getConstituencyElectorsData(data);
     // console.log(
     //   'res of handleGetConstituencyElectorsData---------',
@@ -103,7 +118,7 @@ const ConstituencyScreen = ({navigation, route}) => {
   };
 
   const handleGetAllPartyData = async () => {
-    const data = {year: selectetYear, state: item?.state, id: Constituency};
+    const data = {year: selectetYear, state: state, id: Constituency};
     const res = await getAllPartyData(data);
     // console.log('res of handleGetAllPartyData-----', res.data.data);
     if (res.success) {
@@ -115,7 +130,7 @@ const ConstituencyScreen = ({navigation, route}) => {
   };
 
   const handleGetNdaAllianceData = async () => {
-    const data = {year: selectetYear, state: item?.state, id: Constituency};
+    const data = {year: selectetYear, state: state, id: Constituency};
     const res = await getNdaAllianceData(data);
     // console.log('res of NdaAllianceData---------------------', res.data.data);
     if (res.success) {
@@ -127,7 +142,7 @@ const ConstituencyScreen = ({navigation, route}) => {
   };
 
   const handleGetUpaAllianceData = async () => {
-    const data = {year: selectetYear, state: item?.state, id: Constituency};
+    const data = {year: selectetYear, state: state, id: Constituency};
     const res = await getUpaAllianceData(data);
     // console.log('res of UpaAllianceData------------------', res.data.data);
     if (res.success) {
@@ -139,7 +154,7 @@ const ConstituencyScreen = ({navigation, route}) => {
   };
 
   const handlegetAllPcNameDataTable = async () => {
-    const data = {year: selectetYear, state: item?.state};
+    const data = {year: selectetYear, state: state};
     const res = await getAllPcNameDataTable(data);
     // console.log(
     //   'res of handlegetAllPcNameDataTable--------%%%%%%%%%%%%%%%%% ',
@@ -156,10 +171,14 @@ const ConstituencyScreen = ({navigation, route}) => {
     }
   };
 
+  const oncancelfilter = () => {
+    handlegetAllPcNameDataTable();
+  };
+
   const handleGetFilterSearchData = async () => {
     setModalVisible(!modalVisible);
     const paramObject = {
-      state_name: item?.state,
+      state_name: state,
       year: selectetYear,
       candidate: CandidateSearch,
       margin_percentage: marginPercentagSearch,
@@ -301,7 +320,6 @@ const ConstituencyScreen = ({navigation, route}) => {
   });
 
   //2nd grapth data[-------------------------------------------------------]
-
   return (
     <View style={{flex: 1, backgroundColor: AppColors.white}}>
       <StatusBar
@@ -329,8 +347,20 @@ const ConstituencyScreen = ({navigation, route}) => {
                 alignSelf: 'center',
                 marginVertical: 20,
               }}>
-              {item?.state}
+              {state}
             </Text>
+
+            {/* <Text
+              style={{
+                fontSize: 25,
+                color: AppColors.black,
+                fontWeight: '700',
+                alignSelf: 'center',
+                marginVertical: 20,
+              }}>
+              {selectetYear}
+            </Text> */}
+
             <AppDropDown
               style={{marginTop: 10}}
               height={80}
@@ -344,6 +374,7 @@ const ConstituencyScreen = ({navigation, route}) => {
               labelText="Select Year"
               placeholder="--Select Year--"
             />
+
             <View style={{alignItems: 'center', paddingVertical: 25}}>
               <TouchableOpacity
                 onPress={() => setConstituency('1')}
@@ -779,26 +810,48 @@ const ConstituencyScreen = ({navigation, route}) => {
             </View>
 
             <View></View>
-
-            <TouchableOpacity
-              onPress={() => setModalVisible(!modalVisible)}
-              style={{
-                height: 40,
-                width: 90,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'green',
-                marginTop: 20,
-              }}>
-              <Text
+            <View style={{flexDirection: 'row', marginBottom: 3}}>
+              <TouchableOpacity
+                onPress={() => setModalVisible(!modalVisible)}
                 style={{
-                  color: AppColors.white,
-                  fontSize: 18,
-                  fontWeight: '700',
+                  height: 40,
+                  width: 90,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'green',
+                  marginTop: 20,
                 }}>
-                Filter
-              </Text>
-            </TouchableOpacity>
+                <Text
+                  style={{
+                    color: AppColors.white,
+                    fontSize: 16,
+                    fontWeight: '700',
+                  }}>
+                  Filter
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => oncancelfilter()}
+                style={{
+                  height: 40,
+                  width: 120,
+                  marginLeft: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: AppColors.white,
+                  marginTop: 20,
+                  elevation: 2,
+                }}>
+                <Text
+                  style={{
+                    color: AppColors.black,
+                    fontSize: 16,
+                    fontWeight: '700',
+                  }}>
+                  Clear Filter
+                </Text>
+              </TouchableOpacity>
+            </View>
 
             {allPcNameTableData.length > 0 ? (
               <ScrollView horizontal contentContainerStyle={{}}>
@@ -1008,16 +1061,27 @@ const ConstituencyScreen = ({navigation, route}) => {
                               marginBottom: 15,
                               paddingVertical: 10,
                             }}>
-                            <Text
-                              style={{
-                                fontWeight: 'bold',
-                                width: 250,
-                                textAlign: 'center',
-                                color: AppColors.black,
-                                // backgroundColor: 'green',
-                              }}>
-                              {item?.constituency_name}
-                            </Text>
+                            <TouchableOpacity
+                              onPress={() =>
+                                navigation.navigate(routes.IndiaVotes_Screen, {
+                                  constituency_name: item?.constituency_name,
+                                  year: selectetYear,
+                                  state: state,
+                                })
+                              }
+                              style={{}}>
+                              <Text
+                                style={{
+                                  fontWeight: 'bold',
+                                  width: 250,
+                                  textAlign: 'center',
+                                  color: AppColors.oxfordBlue,
+                                  textDecorationLine: 'underline',
+                                  // backgroundColor: 'green',
+                                }}>
+                                {item?.constituency_name}
+                              </Text>
+                            </TouchableOpacity>
                             <Text
                               style={{
                                 fontWeight: 'bold',

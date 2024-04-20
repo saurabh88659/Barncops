@@ -124,13 +124,66 @@ export const getFilterSearchData = async paramObject => {
     }
   }
   const queryString = paramArray.join('&');
-  console.log('queryString-----------111111111111111111111111', queryString);
   try {
     const result = Instance(
       'GET',
       `${BASE_URL}data/all-pc-name-state/?${queryString}`,
       null,
       {},
+    );
+    return result;
+  } catch (e) {
+    return e;
+  }
+};
+
+export const getConstituencyData = async data => {
+  const {state, year} = data;
+  // console.log('state and year=====', state, year);
+  try {
+    const result = Instance(
+      'GET',
+      `${BASE_URL}ac/electors/?state_name=${state}&year=${year}`,
+      null,
+      data,
+    );
+    return result;
+  } catch (e) {
+    return e;
+  }
+};
+
+export const getPartyData = async data => {
+  const {state, year} = data;
+  // console.log('state and year=====', state, year);
+  try {
+    const result = Instance(
+      'GET',
+      `${BASE_URL}ac/all-party/?state_name=${state}&year=${year}`,
+
+      null,
+      data,
+    );
+    return result;
+  } catch (e) {
+    return e;
+  }
+};
+
+export const getPartyAndCandidateData = async data => {
+  const {state, year, constituency_name} = data;
+  console.log(
+    'state and year and constituency_name=====',
+    state,
+    year,
+    constituency_name,
+  );
+  try {
+    const result = Instance(
+      'GET',
+      `${BASE_URL}ac/all-party-candidate-data/?state_name=${state}&year=${year}&PC_Name=${constituency_name}`,
+      null,
+      data,
     );
     return result;
   } catch (e) {

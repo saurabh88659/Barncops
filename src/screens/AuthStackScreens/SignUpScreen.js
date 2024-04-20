@@ -74,6 +74,7 @@ const SignUpScreen = ({navigation}) => {
       }}>
       <View style={{marginTop: -40}}>
         <ScrollView
+          keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 30, paddingHorizontal: 5}}>
           <Text

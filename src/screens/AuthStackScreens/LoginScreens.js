@@ -4,9 +4,8 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  Easing,
-  ActionSheetIOS,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AppTextInputWithLabel from '../../components/AppTextInputWithLabel';
@@ -74,7 +73,7 @@ const LoginScreens = ({navigation}) => {
   };
 
   return (
-    <View
+    <KeyboardAvoidingView
       style={{
         height: '100%',
         width: '100%',
@@ -82,8 +81,9 @@ const LoginScreens = ({navigation}) => {
         paddingHorizontal: 15,
         justifyContent: 'center',
       }}>
-      <View style={{marginTop: -40}}>
+      <KeyboardAvoidingView style={{marginTop: -40}}>
         <ScrollView
+          keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 30, paddingHorizontal: 5}}>
           <Text
@@ -197,8 +197,8 @@ const LoginScreens = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </View>
-    </View>
+      </KeyboardAvoidingView>
+    </KeyboardAvoidingView>
   );
 };
 
