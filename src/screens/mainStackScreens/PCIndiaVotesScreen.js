@@ -183,7 +183,7 @@ const PCIndiaVotesScreen = ({navigation, route}) => {
         <View
           style={{
             flex: 1,
-            paddingHorizontal: 15,
+            paddingHorizontal: 5,
             backgroundColor: AppColors.white,
           }}>
             <Text
@@ -192,10 +192,32 @@ const PCIndiaVotesScreen = ({navigation, route}) => {
                 color: AppColors.black,
                 fontWeight: '700',
                 alignSelf: 'center',
-                marginVertical: 20,
+                marginVertical: 2,
               }}>
-              {`${state.replace("_"," ")}, ${constituency_name.replace("_"," ")}`}
+              {state.replace("_"," ")}
             </Text>
+            <TouchableOpacity
+                              onPress={() =>
+                                navigation.navigate(routes.IndiaVotes_Screen, {
+                                  constituency_name: constituency_name,
+                                  year: year,
+                                  state: state,
+                                })
+                              }
+                              style={{}}>
+                              <Text
+                                style={{
+                                  fontSize: 25,
+                                  color: AppColors.black,
+                                  fontWeight: '700',
+                                  alignSelf: 'center',
+                                  marginVertical: 2,
+                                  textDecorationLine: 'underline',
+                                  // backgroundColor: 'green',
+                                }}>
+                                {constituency_name.replace("_"," ")}
+                              </Text>
+                            </TouchableOpacity>
           <ScrollView
             contentContainerStyle={{paddingHorizontal: 5, paddingVertical: 20}}
             showsVerticalScrollIndicator={false}>
@@ -464,7 +486,7 @@ const PCIndiaVotesScreen = ({navigation, route}) => {
                       }}>
                       POSITION
                     </Text>
-                    <Text
+                    {/* <Text
                       style={{
                         fontWeight: 'bold',
                         width: 120,
@@ -473,7 +495,7 @@ const PCIndiaVotesScreen = ({navigation, route}) => {
                         // backgroundColor: 'red',
                       }}>
                       CONSTITUENCY
-                    </Text>
+                    </Text> */}
                     <Text
                       style={{
                         fontWeight: 'bold',
@@ -505,7 +527,7 @@ const PCIndiaVotesScreen = ({navigation, route}) => {
                     <Text
                       style={{
                         fontWeight: 'bold',
-                        width: 100,
+                        width: 150,
                         textAlign: 'center',
                         color: AppColors.white,
                       }}>
@@ -535,7 +557,7 @@ const PCIndiaVotesScreen = ({navigation, route}) => {
                               }}>
                               {item.position || '-'}
                             </Text>
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                               onPress={() =>
                                 navigation.navigate(routes.IndiaVotes_Screen, {
                                   constituency_name: item?.constituency_name,
@@ -555,7 +577,7 @@ const PCIndiaVotesScreen = ({navigation, route}) => {
                                 }}>
                                 {item.constituency_name.replace('_',' ') || '-'}
                               </Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                             <Text
                               style={{
                                 fontWeight: 'bold',
@@ -586,7 +608,7 @@ const PCIndiaVotesScreen = ({navigation, route}) => {
                             <Text
                               style={{
                                 fontWeight: 'bold',
-                                width: 100,
+                                width: 150,
                                 textAlign: 'center',
                                 color: AppColors.black,
                               }}>
