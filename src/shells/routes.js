@@ -8,6 +8,8 @@ export const routes = {
   Splash_Screens: 'SplashScreens',
   SignUp_Screen: 'SignUpScreen',
   Login_Screens: 'LoginScreens',
+  OtpVerification_Screen: 'OtpVerificationScreen',
+  Send_OTP_Screen: 'SendOTPScreen',
 
   Home_Screen: 'HomeScreen',
   Election_Oveview_Screen: 'ElectionOveviewScreen',

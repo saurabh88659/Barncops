@@ -4,6 +4,7 @@ import MainStack from './src/shells/MainStack';
 import {NavigationContainer} from '@react-navigation/native';
 import {Provider, useSelector} from 'react-redux';
 import {store} from './src/app/store';
+import OtpVerificationScreen from './src/screens/AuthStackScreens/OtpVerificationScreen';
 
 const App = () => {
   const loggedIn = useSelector(state => state.auth.loggedIn);

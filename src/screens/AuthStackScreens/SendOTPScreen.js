@@ -5,55 +5,35 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
-  KeyboardAvoidingView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AppTextInputWithLabel from '../../components/AppTextInputWithLabel';
 import {AppColors} from '../../assests/AppColors';
 import {Icon} from '../../components/AppIcon';
 import {routes} from '../../shells/routes';
-import {login} from '../../network/networkRequest/authNetworkRequest';
-import {useDispatch} from 'react-redux';
-import {setLoggedIn, setUserData} from '../../features/reducers/auth.reducer';
+import {SentOtp, signup} from '../../network/networkRequest/authNetworkRequest';
+import Toast from 'react-native-simple-toast';
 import {setOfflineData} from '../../network/commonServices';
 import {CONSTANTS} from '../../utils/constants';
-import Toast from 'react-native-simple-toast';
 
-const LoginScreens = ({navigation}) => {
-  const disPatch = useDispatch();
-
+const SendOTPScreen = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [phoneNumberError, setPhoneNumberError] = useState('');
-
-  const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [showPassword, setShowPassword] = useState('');
-
   const [buttonLoading, setButtonLoading] = useState(false);
 
-  //validation function===
-  const validateForm = () => {
-    let isValid = true;
-    return isValid;
-  };
-  const handleLogin = async () => {
+  const handleSentOtp = async () => {
     setButtonLoading(true);
     const data = {
-      password: password,
       phone_no: phoneNumber,
     };
-    const res = await login(data);
+    const res = await SentOtp(data);
+    console.log('res.data of semd tp', res.data.data);
     if (res.success) {
-      await setOfflineData(CONSTANTS.TOKEN, res.data?.data?.tokens?.access);
-      await setOfflineData(
-        CONSTANTS.REFRESH_TOKEN,
-        res.data.data?.tokens?.refresh,
-      );
-      disPatch(setLoggedIn(true));
-      disPatch(setLoggedIn(true));
       setButtonLoading(false);
+      Toast?.show(res?.data?.data.message, Toast.BOTTOM, Toast.LONG);
+      navigation.navigate(routes.OtpVerification_Screen, {
+        phoneNumber: phoneNumber,
+      });
     } else {
-      console.log('error of handleLogin---', res.data.data);
       setButtonLoading(false);
       Object.keys(res?.data?.data)?.forEach(key => {
         if (Array.isArray(res?.data?.data[key])) {
@@ -72,15 +52,14 @@ const LoginScreens = ({navigation}) => {
   };
 
   return (
-    <KeyboardAvoidingView
+    <View
       style={{
         height: '100%',
         width: '100%',
         backgroundColor: AppColors.white,
         paddingHorizontal: 15,
-        justifyContent: 'center',
       }}>
-      <KeyboardAvoidingView style={{marginTop: -40}}>
+      <View style={{marginTop: 50}}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
@@ -93,7 +72,7 @@ const LoginScreens = ({navigation}) => {
               alignSelf: 'center',
               paddingVertical: 30,
             }}>
-            LOGIN
+            REGISTER
           </Text>
           <Text
             style={{
@@ -113,37 +92,16 @@ const LoginScreens = ({navigation}) => {
             leftIconColor={AppColors.black}
             value={phoneNumber}
             onChangeText={text => setPhoneNumber(text)}
-            placeholder={'Enter your phoneNumber'}
+            placeholder={'Enter your phone Number'}
             labelText="phoneNumber"
             style={styles.input}
-            keyboardType={'number - pad'}
+            keyboardType={'number-pad'}
             // validationError={emailError}
             maxLength={10}
           />
 
-          <AppTextInputWithLabel
-            leftIconType={Icon.FontAwesome}
-            leftIconName={'lock'}
-            leftIconSize={22}
-            leftIconColor={AppColors.black}
-            value={password}
-            onChangeText={text => setPassword(text)}
-            placeholder={'Enter your Password'}
-            labelText="Password"
-            style={{marginTop: 0}}
-            validationError={passwordError}
-            maxLength={25}
-            // keyboardType={'numeric'}
-            IconType={Icon.Ionicons}
-            Iconname={showPassword ? 'eye-off' : 'eye'}
-            Iconsize={22}
-            Iconcolor={AppColors.dark_grey}
-            onEyePress={() => setShowPassword(!showPassword)}
-            secureTextEntry={!showPassword}
-          />
-
           <TouchableOpacity
-            onPress={() => handleLogin()}
+            onPress={handleSentOtp}
             style={{
               height: 45,
               width: 150,
@@ -166,13 +124,12 @@ const LoginScreens = ({navigation}) => {
               </Text>
             )}
           </TouchableOpacity>
-
-          <View
+          {/* <View
             style={{
-              flexDirection: 'row',
               alignItems: 'center',
               marginTop: '10%',
-              alignSelf: 'center',
+              justifyContent: 'flex-start',
+              flexDirection: 'row',
             }}>
             <Text
               style={{
@@ -180,10 +137,11 @@ const LoginScreens = ({navigation}) => {
                 color: AppColors.black,
                 fontWeight: '500',
               }}>
-              Don't you have an Account?
+              Already have an Account?
             </Text>
             <TouchableOpacity
-              onPress={() => navigation.navigate(routes.SignUp_Screen)}>
+            //   onPress={() => navigation.navigate(routes.Login_Screens)}
+            >
               <Text
                 style={{
                   fontSize: 15,
@@ -191,16 +149,16 @@ const LoginScreens = ({navigation}) => {
                   fontWeight: '900',
                   marginLeft: 3,
                 }}>
-                Register Now
+                Login Now
               </Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </ScrollView>
-      </KeyboardAvoidingView>
-    </KeyboardAvoidingView>
+      </View>
+    </View>
   );
 };
 
-export default LoginScreens;
+export default SendOTPScreen;
 
 const styles = StyleSheet.create({});

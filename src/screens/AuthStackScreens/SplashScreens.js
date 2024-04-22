@@ -21,7 +21,7 @@ const SplashScreens = ({navigation}) => {
     if (token) {
       disPatch(setLoggedIn(true));
     } else {
-      navigation.replace(routes.Login_Screens);
+      navigation.replace(routes.Send_OTP_Screen);
     }
   };
   return (
