@@ -10,6 +10,7 @@ import {AppColors} from '../assests/AppColors';
 import AppIcon from './AppIcon';
 
 const AppTextInputWithLabel = ({
+  ref,
   value,
   placeholder,
   onChangeText,
@@ -54,6 +55,7 @@ const AppTextInputWithLabel = ({
         </View>
 
         <TextInput
+          ref={ref}
           keyboardType={keyboardType}
           // keyboardType='number-pad'
           value={value}

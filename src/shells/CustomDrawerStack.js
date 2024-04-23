@@ -12,15 +12,21 @@ import {AppColors} from '../assests/AppColors';
 import {useDispatch} from 'react-redux';
 import {setLoggedIn} from '../features/reducers/auth.reducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
+import {routes} from './routes';
 
 const CustomDrawerStack = props => {
   const disPatch = useDispatch();
+  const navigation = useNavigation();
 
-  // const disPatch=useD
-  const logout = () => {
-    disPatch(setLoggedIn(false));
-    AsyncStorage.clear();
+  const login = () => {
+    navigation.navigate(routes.Send_OTP_Screen);
   };
+  // const disPatch=useD
+  // const logout = () => {
+  //   disPatch(setLoggedIn(false));
+  //   AsyncStorage.clear();
+  // };
   return (
     <View style={{flex: 1}}>
       <View
@@ -57,11 +63,11 @@ const CustomDrawerStack = props => {
           justifyContent: 'flex-end',
           paddingBottom: 50,
         }}>
-        <TouchableOpacity onPress={logout}>
+        <TouchableOpacity onPress={login}>
           <View style={{marginTop: 30, flexDirection: 'row'}}>
             <MaterialIcons name="logout" size={25} color="black" />
             <Text style={{fontSize: 17, marginLeft: 7, color: 'black'}}>
-              Logout
+              Login
             </Text>
           </View>
         </TouchableOpacity>

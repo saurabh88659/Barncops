@@ -12,8 +12,10 @@ const SplashScreens = ({navigation}) => {
 
   useEffect(() => {
     setTimeout(() => {
-      checkLogin();
-    }, 1000);
+      // checkLogin();
+      // navigation.replace(routes.Send_OTP_Screen);
+      disPatch(setLoggedIn(true));
+    }, 500);
   }, []);
 
   const checkLogin = async () => {
@@ -24,6 +26,7 @@ const SplashScreens = ({navigation}) => {
       navigation.replace(routes.Send_OTP_Screen);
     }
   };
+
   return (
     <View
       style={{

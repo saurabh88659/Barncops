@@ -3,7 +3,12 @@ import React from 'react';
 import AppIcon, {Icon} from './AppIcon';
 import {AppColors} from '../assests/AppColors';
 
-const AppHeader = ({title = 'Home', onPress, isDrawer = true}) => {
+const AppHeader = ({
+  title = 'Home',
+  onPress,
+  isDrawer = true,
+  backbutton = true,
+}) => {
   return (
     <View
       style={{
@@ -33,12 +38,14 @@ const AppHeader = ({title = 'Home', onPress, isDrawer = true}) => {
             size={22}
           />
         ) : (
-          <AppIcon
-            Type={Icon.Feather}
-            name={'arrow-left'}
-            color={AppColors.white}
-            size={27}
-          />
+          backbutton && (
+            <AppIcon
+              Type={Icon.Feather}
+              name={'arrow-left'}
+              color={AppColors.white}
+              size={27}
+            />
+          )
         )}
       </TouchableOpacity>
       <Text style={{fontSize: 20, fontWeight: '700', color: AppColors.white}}>

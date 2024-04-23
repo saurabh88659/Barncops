@@ -12,29 +12,32 @@ import {CONSTANTS} from '../../utils/constants';
 import {AppColors} from '../../assests/AppColors';
 import AppHeader from '../../components/AppHeader';
 import AppIcon, {Icon} from '../../components/AppIcon';
+import {useSelector} from 'react-redux';
 
 const Profile = ({navigation}) => {
-  const [userData, setUserData] = useState('');
+  // const [userData, setUserData] = useState('');
   const [screenLoading, setScreenLoading] = useState('');
+  const userData = useSelector(state => state.auth.userData);
 
-  useEffect(() => {
-    handleGetProfile();
-  }, []);
+  // useEffect(() => {
+  //   handleGetProfile();
+  // }, []);
 
-  const handleGetProfile = async () => {
-    setScreenLoading(true);
-    const token = await AsyncStorage.getItem(CONSTANTS.TOKEN);
-    console.log('token------', token);
-    const res = await getProfile();
-    console.log('res  handleGetProfile------- ', res.data.data);
-    if (res.success) {
-      setScreenLoading(false);
-      setUserData(res.data.data);
-    } else {
-      setScreenLoading(false);
-      console.log('error of handleGetProfile----', res.data.data);
-    }
-  };
+  // const handleGetProfile = async () => {
+  //   setScreenLoading(true);
+  //   const token = await AsyncStorage.getItem(CONSTANTS.TOKEN);
+  //   console.log('token------', token);
+  //   const res = await getProfile();
+  //   // console.log('res  handleGetProfile------- ', res.data.data);
+  //   if (res.success) {
+  //     setScreenLoading(false);
+  //     setUserData(res?.data.data);
+  //   } else {
+  //     setScreenLoading(false);
+  //     console.log('error of handleGetProfile----', res?.data?.data);
+  //   }
+  // };
+
   return (
     <View style={{backgroundColor: AppColors.white, flex: 1}}>
       <StatusBar
@@ -99,7 +102,9 @@ const Profile = ({navigation}) => {
                   fontWeight: '700',
                   opacity: 0.5,
                 }}>
-                {userData?.first_name} {userData?.last_name}
+                {userData?.first_name
+                  ? `${userData?.first_name} ${userData?.last_name}`
+                  : '-----------'}
               </Text>
             </View>
 
