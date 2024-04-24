@@ -5,8 +5,10 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  StatusBar,
+  Keyboard,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import AppTextInputWithLabel from '../../components/AppTextInputWithLabel';
 import {AppColors} from '../../assests/AppColors';
 import {Icon} from '../../components/AppIcon';
@@ -15,10 +17,30 @@ import {SentOtp, signup} from '../../network/networkRequest/authNetworkRequest';
 import Toast from 'react-native-simple-toast';
 import {setOfflineData} from '../../network/commonServices';
 import {CONSTANTS} from '../../utils/constants';
+import AppHeader from '../../components/AppHeader';
+import {useIsFocused} from '@react-navigation/native';
 
 const SendOTPScreen = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [buttonLoading, setButtonLoading] = useState(false);
+  const phoneNumberInputRef = useRef(null);
+  const isFocused = useIsFocused();
+  const InputRef = useRef(null);
+  const [refresh, setRefresh] = useState(false);
+
+  useEffect(() => {
+    if (isFocused) {
+      setTimeout(() => InputRef?.current?.focus(), 1);
+      setRefresh(!refresh);
+    }
+  }, [isFocused]);
+
+  //   useEffect(() => {
+  //     if (phoneNumberInputRef.current) {
+  //       phoneNumberInputRef.current.focus();
+  //     }
+  //     Keyboard.dismiss();
+  //   }, []);
 
   const handleSentOtp = async () => {
     setButtonLoading(true);
@@ -57,9 +79,18 @@ const SendOTPScreen = ({navigation}) => {
         height: '100%',
         width: '100%',
         backgroundColor: AppColors.white,
-        paddingHorizontal: 15,
       }}>
-      <View style={{marginTop: 50}}>
+      <StatusBar
+        backgroundColor={AppColors.primaryColor}
+        barStyle={'light-content'}
+      />
+      <AppHeader
+        backbutton={false}
+        onPress={() => navigation.goBack()}
+        isDrawer={false}
+        title="Login"
+      />
+      <View style={{marginTop: 50, paddingHorizontal: 15}}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
@@ -72,7 +103,7 @@ const SendOTPScreen = ({navigation}) => {
               alignSelf: 'center',
               paddingVertical: 30,
             }}>
-            REGISTER
+            LOGIN
           </Text>
           <Text
             style={{
@@ -86,6 +117,8 @@ const SendOTPScreen = ({navigation}) => {
           </Text>
 
           <AppTextInputWithLabel
+            key={refresh}
+            ref={InputRef}
             leftIconType={Icon.FontAwesome}
             leftIconName={'phone'}
             leftIconSize={22}

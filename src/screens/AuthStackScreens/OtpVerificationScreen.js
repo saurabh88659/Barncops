@@ -26,6 +26,7 @@ import {setOfflineData} from '../../network/commonServices';
 import {CONSTANTS} from '../../utils/constants';
 import {setLoggedIn} from '../../features/reducers/auth.reducer';
 import Toast from 'react-native-simple-toast';
+import {routes} from '../../shells/routes';
 
 const OtpVerificationScreen = ({navigation, route}) => {
   const disPatch = useDispatch();
@@ -54,10 +55,11 @@ const OtpVerificationScreen = ({navigation, route}) => {
     const res = await otpVerification(object);
     console.log('res of handleOtpVerification ', res.data.data);
     if (res.success) {
-      setButtonLoading(false);
       await setOfflineData(CONSTANTS.TOKEN, res.data?.data?.access);
       await setOfflineData(CONSTANTS.REFRESH_TOKEN, res.data.data?.refresh);
-      disPatch(setLoggedIn(true));
+      navigation.replace('DrawerStack');
+      setButtonLoading(false);
+      // disPatch(setLoggedIn(true));
     } else {
       setButtonLoading(false);
       Object.keys(res?.data?.data)?.forEach(key => {
@@ -214,11 +216,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     borderWidth: 2,
     borderColor: AppColors.black,
-    textAlign: 'center',
-    borderRadius: 20,
     color: AppColors.black,
     justifyContent: 'center',
-    alignItems: 'center',
+    textAlign: 'center',
+    borderRadius: 20,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    paddingTop: 5,
   },
   focusCell: {
     borderColor: AppColors.primaryColor,

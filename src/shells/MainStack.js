@@ -8,6 +8,8 @@ import {routes} from './routes';
 import DrawerStack from './DrawerStack';
 import IndiaVotesScreen from '../screens/mainStackScreens/IndiaVotesScreen';
 import PCIndiaVotesScreen from '../screens/mainStackScreens/PCIndiaVotesScreen';
+import SendOTPScreen from '../screens/AuthStackScreens/SendOTPScreen';
+import OtpVerificationScreen from '../screens/AuthStackScreens/OtpVerificationScreen';
 
 const MainStack = () => {
   const Stack = createNativeStackNavigator();
@@ -30,6 +32,11 @@ const MainStack = () => {
       <Stack.Screen
         name={routes.IndiaVotes_Screen}
         component={IndiaVotesScreen}
+      />
+      <Stack.Screen name={routes.Send_OTP_Screen} component={SendOTPScreen} />
+      <Stack.Screen
+        name={routes.OtpVerification_Screen}
+        component={OtpVerificationScreen}
       />
     </Stack.Navigator>
   );
