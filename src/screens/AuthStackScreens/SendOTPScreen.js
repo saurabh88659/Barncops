@@ -23,7 +23,7 @@ const SendOTPScreen = ({navigation}) => {
   const handleSentOtp = async () => {
     setButtonLoading(true);
     const data = {
-      phone_no: phoneNumber,
+      phone_no: `+91${phoneNumber}`,
     };
     const res = await SentOtp(data);
     console.log('res.data of semd tp', res.data.data);
@@ -31,7 +31,7 @@ const SendOTPScreen = ({navigation}) => {
       setButtonLoading(false);
       Toast?.show(res?.data?.data.message, Toast.BOTTOM, Toast.LONG);
       navigation.navigate(routes.OtpVerification_Screen, {
-        phoneNumber: phoneNumber,
+        phoneNumber: `+91${phoneNumber}`,
       });
     } else {
       setButtonLoading(false);
