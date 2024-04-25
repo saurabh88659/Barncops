@@ -15,7 +15,7 @@ import {
   getPartyAndCandidateData,
   getPartyData,
 } from '../../network/networkRequest/mainApiRequest';
-import { BarChart, PieChart } from 'react-native-gifted-charts';
+import {BarChart, PieChart} from 'react-native-gifted-charts';
 
 const IndiaVotesScreen = ({navigation, route}) => {
   const constituency_name = route.params.constituency_name;
@@ -633,136 +633,144 @@ const IndiaVotesScreen = ({navigation, route}) => {
               </ScrollView>
             )} */}
             <ScrollView nestedScrollEnabled={true} horizontal={false}>
-                  {Object.keys(candidateData).map(constituency => (
-                    <View key={constituency} style={{ backgroundColor: '#fff', elevation: 2, padding: 10 }}>
-                      <Text style={{
-                                fontSize:18,
-                                fontWeight: 'bold',
-                                textAlign: 'center',
-                                color: AppColors.black,
-                              }}>{constituency}</Text>
-                      <Text style={{
-                                fontWeight: 'bold',
-                                textAlign: 'center',
-                                color: AppColors.black,
-                              }}>Total Votes: {candidateData[constituency]['Total Votes']}</Text>
-                      <ScrollView horizontal contentContainerStyle={{}}>
+              {Object.keys(candidateData).map(constituency => (
                 <View
-                  style={{
-                    // padding: 10,
-                    backgroundColor: AppColors.white,
-                    paddingBottom: 20,
-                    elevation: 6,
-                    paddingTop: 10,
-                  }}>
-                  <View
+                  key={constituency}
+                  style={{backgroundColor: '#fff', elevation: 2, padding: 10}}>
+                  <Text
                     style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      marginBottom: 15,
-                      backgroundColor: '#000',
-                      paddingVertical: 10,
+                      fontSize: 18,
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                      color: AppColors.black,
                     }}>
-                    <Text
+                    {constituency}
+                  </Text>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                      color: AppColors.black,
+                    }}>
+                    Total Votes: {candidateData[constituency]['Total Votes']}
+                  </Text>
+                  <ScrollView horizontal contentContainerStyle={{}}>
+                    <View
                       style={{
-                        fontWeight: 'bold',
-                        width: 250,
-                        textAlign: 'center',
-                        color: AppColors.white,
-                        // backgroundColor: 'green',
+                        // padding: 10,
+                        backgroundColor: AppColors.white,
+                        paddingBottom: 20,
+                        elevation: 6,
+                        paddingTop: 10,
                       }}>
-                      CANDIDATE NAME
-                    </Text>
-                    <Text
-                      style={{
-                        fontWeight: 'bold',
-                        width: 100,
-                        textAlign: 'center',
-                        color: AppColors.white,
-                        // backgroundColor: 'red',
-                      }}>
-                      PARTY NAME
-                    </Text>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          marginBottom: 15,
+                          backgroundColor: '#000',
+                          paddingVertical: 10,
+                        }}>
+                        <Text
+                          style={{
+                            fontWeight: 'bold',
+                            width: 250,
+                            textAlign: 'center',
+                            color: AppColors.white,
+                            // backgroundColor: 'green',
+                          }}>
+                          CANDIDATE NAME
+                        </Text>
+                        <Text
+                          style={{
+                            fontWeight: 'bold',
+                            width: 100,
+                            textAlign: 'center',
+                            color: AppColors.white,
+                            // backgroundColor: 'red',
+                          }}>
+                          PARTY NAME
+                        </Text>
 
-                    <Text
-                      style={{
-                        fontWeight: 'bold',
-                        width: 100,
-                        textAlign: 'center',
-                        color: AppColors.white,
-                      }}>
-                      VOTES
-                    </Text>
+                        <Text
+                          style={{
+                            fontWeight: 'bold',
+                            width: 100,
+                            textAlign: 'center',
+                            color: AppColors.white,
+                          }}>
+                          VOTES
+                        </Text>
 
-                    <Text
-                      style={{
-                        fontWeight: 'bold',
-                        width: 150,
-                        textAlign: 'center',
-                        color: AppColors.white,
-                      }}>
-                      VOTES PERCENTAGE
-                    </Text>
+                        <Text
+                          style={{
+                            fontWeight: 'bold',
+                            width: 150,
+                            textAlign: 'center',
+                            color: AppColors.white,
+                          }}>
+                          VOTES PERCENTAGE
+                        </Text>
+                      </View>
+                      <View>
+                        {candidateData &&
+                          candidateData[constituency].Candidates.map(
+                            (item, index) => {
+                              console.log('item>>>>>>>>>>>>>>', item);
+                              return (
+                                <View
+                                  style={{
+                                    flexDirection: 'row',
+                                    // justifyContent: 'space-between',
+                                    marginBottom: 15,
+                                    paddingVertical: 10,
+                                  }}>
+                                  <Text
+                                    style={{
+                                      fontWeight: 'bold',
+                                      width: 250,
+                                      textAlign: 'center',
+                                      color: AppColors.black,
+                                    }}>
+                                    {item['Candidate Name'] || '-'}
+                                  </Text>
+                                  <Text
+                                    style={{
+                                      fontWeight: 'bold',
+                                      width: 100,
+                                      textAlign: 'center',
+                                      color: AppColors.black,
+                                    }}>
+                                    {item['Party Name'] || '-'}
+                                  </Text>
+                                  <Text
+                                    style={{
+                                      fontWeight: 'bold',
+                                      width: 100,
+                                      textAlign: 'center',
+                                      color: AppColors.black,
+                                    }}>
+                                    {item['Votes'] || '-'}
+                                  </Text>
+                                  <Text
+                                    style={{
+                                      fontWeight: 'bold',
+                                      width: 150,
+                                      textAlign: 'center',
+                                      color: AppColors.black,
+                                    }}>
+                                    {item['Vote Percentage'] || '-'}
+                                  </Text>
+                                </View>
+                              );
+                            },
+                          )}
+                      </View>
                     </View>
-                    <View>
-                    {candidateData &&
-                      candidateData[constituency].Candidates.map((item, index) => {
-                        console.log('item>>>>>>>>>>>>>>', item);
-                        return (
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              // justifyContent: 'space-between',
-                              marginBottom: 15,
-                              paddingVertical: 10,
-                            }}>
-                            <Text
-                              style={{
-                                fontWeight: 'bold',
-                                width: 250,
-                                textAlign: 'center',
-                                color: AppColors.black,
-                              }}>
-                              {item['Candidate Name'] || '-'}
-                            </Text>
-                            <Text
-                              style={{
-                                fontWeight: 'bold',
-                                width: 100,
-                                textAlign: 'center',
-                                color: AppColors.black,
-                              }}>
-                              {item['Party Name'] || '-'}
-                            </Text>
-                            <Text
-                              style={{
-                                fontWeight: 'bold',
-                                width: 100,
-                                textAlign: 'center',
-                                color: AppColors.black,
-                              }}>
-                              
-                              {item['Votes'] || '-'}
-                            </Text>
-                            <Text
-                              style={{
-                                fontWeight: 'bold',
-                                width: 150,
-                                textAlign: 'center',
-                                color: AppColors.black,
-                              }}>
-                              
-                              {item['Vote Percentage'] || '-'}
-                            </Text>
-                          </View>
-                        );
-                      })}
-                  </View>
-                  </View>
                   </ScrollView>
-                    </View>
-                  ))}
-                </ScrollView>
+                </View>
+              ))}
+            </ScrollView>
           </ScrollView>
         </View>
       )}
