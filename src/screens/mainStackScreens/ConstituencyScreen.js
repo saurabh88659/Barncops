@@ -217,7 +217,7 @@ const ConstituencyScreen = ({navigation, route}) => {
           style={{
             fontSize: 15,
             fontWeight: '700',
-            color: AppColors.dark_grey,
+            color: AppColors.primaryColor,
           }}>
           {value}
         </Text>
@@ -357,7 +357,7 @@ const ConstituencyScreen = ({navigation, route}) => {
       ) : (
         <ScrollView>
           <View style={{paddingHorizontal: 15, paddingVertical: 10}}>
-            <Text
+            {/* <Text
               style={{
                 fontSize: 25,
                 color: AppColors.black,
@@ -366,7 +366,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                 marginVertical: 20,
               }}>
               {state.replace("_"," ")}
-            </Text>
+            </Text> */}
 
             {/* <Text
               style={{
@@ -378,7 +378,16 @@ const ConstituencyScreen = ({navigation, route}) => {
               }}>
               {selectetYear}
             </Text> */}
-
+            {/* <Text
+              style={{
+                fontSize: 25,
+                color: AppColors.black,
+                fontWeight: '700',
+                alignSelf: 'center',
+                marginVertical: 20,
+              }}>
+              Lok Sabha Elections 2024
+            </Text> */}
             <AppDropDown
               style={{marginTop: 10}}
               height={80}
@@ -404,6 +413,16 @@ const ConstituencyScreen = ({navigation, route}) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   marginBottom: 20,
+                  borderRadius:10,
+                  shadowColor: Constituency == 1 ? AppColors.primaryColor:AppColors.grey,
+                  shadowOffset: {
+                    width: 0,
+                    height: 10,
+                  },
+                  shadowOpacity: 0.5,
+                  shadowRadius: 4.65,
+
+                  elevation: 7,
                 }}>
                 <Text style={{color: AppColors.white, fontWeight: '800'}}>
                   Parliamentary Constituency
@@ -419,6 +438,16 @@ const ConstituencyScreen = ({navigation, route}) => {
                     Constituency == 2 ? '#ff8000' : AppColors.grey,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  borderRadius:10,
+                  shadowColor: Constituency == 2 ? AppColors.primaryColor:AppColors.grey,
+                  shadowOffset: {
+                    width: 0,
+                    height: 10,
+                  },
+                  shadowOpacity: 0.5,
+                  shadowRadius: 4.65,
+
+                  elevation: 7,
                 }}>
                 <Text style={{color: AppColors.white, fontWeight: '800'}}>
                   Assembly Constituency
@@ -536,6 +565,9 @@ const ConstituencyScreen = ({navigation, route}) => {
                 )}
                 {pieDatavotes.length > 0 && (
                   <PieChart
+                  donut
+                  innerCircleBorderWidth={6}
+                  innerCircleBorderColor="lightgray"
                     isAnimated={true}
                     animationDuration={1}
                     // showText
@@ -780,6 +812,9 @@ const ConstituencyScreen = ({navigation, route}) => {
 
                 {pieDataSeat.length > 0 && (
                   <PieChart
+                  donut
+                  innerCircleBorderWidth={6}
+                  innerCircleBorderColor="lightgray"
                     isAnimated={true}
                     animationDuration={1}
                     // showText

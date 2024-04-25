@@ -428,6 +428,9 @@ const PCIndiaVotesScreen = ({navigation, route}) => {
                 )}
                 {pieDatavotes.length > 0 && (
                   <PieChart
+                  donut
+                  innerCircleBorderWidth={6}
+                  innerCircleBorderColor="lightgray"
                     isAnimated={true}
                     animationDuration={1}
                     // showText
