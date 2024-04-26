@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View, Text, Image, StatusBar} from 'react-native';
 import React, {useEffect} from 'react';
 import {AppColors} from '../../assests/AppColors';
 import {getOfflineData} from '../../network/commonServices';
@@ -35,14 +35,20 @@ const SplashScreens = ({navigation}) => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <Text
+      <StatusBar backgroundColor={AppColors.white} barStyle={'dark-content'} />
+      <Image
+        style={{height: 200, width: 200}}
+        resizeMode="contain"
+        source={require('../../assests/images/logo.png')}
+      />
+      {/* <Text
         style={{
           color: AppColors.primaryColor,
           fontWeight: '900',
           fontSize: 33,
         }}>
         Barncops
-      </Text>
+      </Text> */}
     </View>
   );
 };

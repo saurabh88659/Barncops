@@ -11,7 +11,13 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {AppColors} from '../../assests/AppColors';
-import {getAllPartyData, getConstituencyData, getConstituencyElectorsData, getState, getYear} from '../../network/networkRequest/mainApiRequest';
+import {
+  getAllPartyData,
+  getConstituencyData,
+  getConstituencyElectorsData,
+  getState,
+  getYear,
+} from '../../network/networkRequest/mainApiRequest';
 import {useDispatch} from 'react-redux';
 import {setStates, setYear} from '../../features/reducers/data.reducer';
 import {useSelector} from 'react-redux';
@@ -27,7 +33,7 @@ import {setOfflineData} from '../../network/commonServices';
 import {configureLayoutAnimationBatch} from 'react-native-reanimated/lib/typescript/reanimated2/core';
 import {centeredLatitudeAndLongitude} from '../../utils/centeredLatitudeAndLongitudeData';
 import Phase from '../../components/Phase';
-import { BarChart, PieChart } from 'react-native-gifted-charts';
+import {BarChart, PieChart} from 'react-native-gifted-charts';
 
 const HomeScreen = ({navigation}) => {
   const disPatch = useDispatch();
@@ -35,7 +41,10 @@ const HomeScreen = ({navigation}) => {
   const windowHeight = Dimensions.get('window').height;
   const states = useSelector(state => state.appData.states);
   const year = useSelector(state => state.appData.year);
-  console.log('year-----------', year);
+  console.log(
+    'year-----------YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY',
+    year,
+  );
   console.log(
     'states++++++++++++++++++++++++++++++++((((((((((((((((((((((((99999999999999999',
     states,
@@ -53,6 +62,9 @@ const HomeScreen = ({navigation}) => {
     longitudeDelta: 30,
   });
   const [pcData, setPcData] = useState('');
+  const [allPartyData, setAllPartyData] = useState([]);
+  const [electorsData, setElectorsData] = useState('');
+  const [selectedFeature, setSelectedFeature] = useState(null);
 
   useEffect(() => {
     //changes
@@ -175,7 +187,12 @@ const HomeScreen = ({navigation}) => {
     // ===================================================comment of f later=========================================
     // setSelectedState('');
     setScreenLoading(true);
-    Promise.all([handleGetState(), handleGetYear()   ,handleGetConstituencyElectorsData(),      handleGetAllPartyData(),])
+    Promise.all([
+      handleGetState(),
+      handleGetYear(),
+      handleGetConstituencyElectorsData(),
+      handleGetAllPartyData(),
+    ])
       .then((res, rej) => {
         setScreenLoading(false);
       })
@@ -183,14 +200,14 @@ const HomeScreen = ({navigation}) => {
         console.error('Error occurred while fetching data:', error);
         setScreenLoading(false);
       });
-  }, []);
+  }, [selectedYear]);
 
   const handleGetState = async () => {
     const res = await getState();
-    console.log(
-      're of get state===========================11111111111111',
-      res.data.data,
-    );
+    // console.log(
+    //   're of get state===========================11111111111111',
+    //   res.data.data,
+    // );
     if (res.success) {
       disPatch(setStates(res.data.data));
     } else {
@@ -200,15 +217,22 @@ const HomeScreen = ({navigation}) => {
 
   const handleGetYear = async () => {
     const res = await getYear();
-    // console.log(
-    //   're of get year===========================222222222222222222222',
-    //   res.data.data,
-    // );
+    console.log(
+      're of get year===========================222222222222222222222',
+      res.data.data,
+    );
+
     if (res.success) {
+      // const formattedYears = res.data.data.map(item => ({
+      //   ...item,
+      //   // year: parseInt(item.year),
+      //   year: isNaN(parseInt(item.year)) ? null : parseInt(item.year),
+      // }));
+      // disPatch(setYear(formattedYears));
+
       const formattedYears = res.data.data.map(item => ({
         ...item,
-        // year: parseInt(item.year),
-        year: isNaN(parseInt(item.year)) ? null : parseInt(item.year),
+        year: item.year.toString(), // Convert year to string
       }));
       disPatch(setYear(formattedYears));
       // disPatch(setYear(res.data.data));
@@ -247,18 +271,14 @@ const HomeScreen = ({navigation}) => {
   //     }
   //   }
   // };
-  const [selectedFeature, setSelectedFeature] = useState(null);
 
-  const handleFeaturePress = (event) => {
-    console.log(event.feature.properties.pc_name)
+  const handleFeaturePress = event => {
+    console.log(event.feature.properties.pc_name);
     // const { properties } = event.feature;
     setSelectedFeature(event.feature.properties.pc_name);
   };
 
-
-
   ///
-  const [electorsData, setElectorsData] = useState('');
 
   const handleGetConstituencyElectorsData = async () => {
     const data = {year: selectedYear, state: selectetdState, id: 1};
@@ -301,79 +321,78 @@ const HomeScreen = ({navigation}) => {
     );
   };
 
-    // Fixed colors for top 6 parties
-    const partyColors = {
-      'BJP': '#FF6A00',
-      'INC': '#0061FE',
-      'TMC': '#515405',
-      'AIADMK': '#333333',
-      'DMK': '#B51900',
-      'BSP': '#012F7B',
-      'SP': '#263D0F',
-      'NCP': '#3B87FE',
-      'CPI': '#5C0702',
-      'CPI (M)': '#FF6252',
-      'JD(U)': '#36581B',
-      'LJP': '#52D6FC',
-      'RJD': '#B1DC8A',
-      'TDP': '#FDFC42',
-      'BRS': '#EF719E',
-      'AAP': '#016D90',
-      'NPP': '#F6EC00',
-      'BJD': '#97D35F',
-      'INLD': '#4D7928',
-      'SAD': '#FFAB02',
-      'YSRCP': '#381A94',
-      'JD(S)': '#76BA3F',
-      'NPF': '#93E3FC',
-      'AIMIM': '#94E3FB'
-    };
-  
-    //1st grapth data[-------------------------------------------------------]
-    const pieDatavotes = allPartyData?.slice(0, 6)?.map((party, index) => {
-      return {
-        value: party?.Total_Votes,
-        color: partyColors[party?.Party_Name] || '#000000',
-        text: `${party?.Vote_Percentage.toFixed(2)}%`,
-      };
-    });
-  
-    const pieDatavotes1 = allPartyData?.slice(0, 6)?.map((party, index) => {
-      return {
-        value: party?.Total_Seats,
-        frontColor: partyColors[party?.Party_Name] || '#000000',
-        text: party?.Total_Seats,
-        label: party?.Party_Name,
-        topLabelComponent: () => (
-          <Text style={{color: AppColors.black, fontSize: 16, marginBottom: 4}}>
-            {party?.Total_Seats}
-          </Text>
-        ),
-      };
-    });
-  
-    const DotVotesDatas = allPartyData?.slice(0, 6)?.map((party, index) => {
-      return {
-        Partyname: party?.Party_Name,
-        totalVotes: party?.Total_Votes,
-        color: partyColors[party?.Party_Name] || '#000000',
-        votesPercentage: `${party?.Vote_Percentage.toFixed(2)}%`,
-      };
-    });
-    const [allPartyData, setAllPartyData] = useState([]);
+  // Fixed colors for top 6 parties
+  const partyColors = {
+    BJP: '#FF6A00',
+    INC: '#0061FE',
+    TMC: '#515405',
+    AIADMK: '#333333',
+    DMK: '#B51900',
+    BSP: '#012F7B',
+    SP: '#263D0F',
+    NCP: '#3B87FE',
+    CPI: '#5C0702',
+    'CPI (M)': '#FF6252',
+    'JD(U)': '#36581B',
+    LJP: '#52D6FC',
+    RJD: '#B1DC8A',
+    TDP: '#FDFC42',
+    BRS: '#EF719E',
+    AAP: '#016D90',
+    NPP: '#F6EC00',
+    BJD: '#97D35F',
+    INLD: '#4D7928',
+    SAD: '#FFAB02',
+    YSRCP: '#381A94',
+    'JD(S)': '#76BA3F',
+    NPF: '#93E3FC',
+    AIMIM: '#94E3FB',
+  };
 
-    const handleGetAllPartyData = async () => {
-      const data = {year: selectedYear, state: selectetdState, id:1};
-      const res = await getAllPartyData(data);
-      // console.log('res of handleGetAllPartyData-----', res.data.data);
-      if (res.success) {
-        setAllPartyData(res.data.data);
-      } else {
-        setAllPartyData([]);
-        // console.log('error of handleGetAllPartyData-----', res.data);
-      }
+  //1st grapth data[-------------------------------------------------------]
+  const pieDatavotes = allPartyData?.slice(0, 6)?.map((party, index) => {
+    return {
+      value: party?.Total_Votes,
+      color: partyColors[party?.Party_Name] || '#000000',
+      text: `${party?.Vote_Percentage.toFixed(2)}%`,
     };
-    
+  });
+
+  const pieDatavotes1 = allPartyData?.slice(0, 6)?.map((party, index) => {
+    return {
+      value: party?.Total_Seats,
+      frontColor: partyColors[party?.Party_Name] || '#000000',
+      text: party?.Total_Seats,
+      label: party?.Party_Name,
+      topLabelComponent: () => (
+        <Text style={{color: AppColors.black, fontSize: 16, marginBottom: 4}}>
+          {party?.Total_Seats}
+        </Text>
+      ),
+    };
+  });
+
+  const DotVotesDatas = allPartyData?.slice(0, 6)?.map((party, index) => {
+    return {
+      Partyname: party?.Party_Name,
+      totalVotes: party?.Total_Votes,
+      color: partyColors[party?.Party_Name] || '#000000',
+      votesPercentage: `${party?.Vote_Percentage.toFixed(2)}%`,
+    };
+  });
+
+  const handleGetAllPartyData = async () => {
+    const data = {year: selectedYear, state: selectetdState, id: 1};
+    const res = await getAllPartyData(data);
+    // console.log('res of handleGetAllPartyData-----', res.data.data);
+    if (res.success) {
+      setAllPartyData(res.data.data);
+    } else {
+      setAllPartyData([]);
+      // console.log('error of handleGetAllPartyData-----', res.data);
+    }
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: AppColors.white}}>
       <StatusBar
@@ -418,10 +437,10 @@ const HomeScreen = ({navigation}) => {
                       justifyContent: 'center',
                       borderRadius: 90 / 2,
                       borderColor: AppColors.primaryColor,
-                      borderStyle:'dashed'
+                      borderStyle: 'dashed',
                     }}>
                     <Image
-                      style={{height: 80, width: 80, borderRadius:80/2}}
+                      style={{height: 80, width: 80, borderRadius: 80 / 2}}
                       resizeMode="contain"
                       source={require('../../assests/images/homeRoundCard.png')}
                     />
@@ -439,30 +458,55 @@ const HomeScreen = ({navigation}) => {
             />
           </View>
           <View style={{marginTop: 15, paddingHorizontal: 15}}>
-            <Text style={[styles.CardHeading, {marginBottom: 10,fontSize:25,color:AppColors.primaryColor}]}>
+            <Text
+              style={[
+                styles.CardHeading,
+                {marginBottom: 10, fontSize: 25, color: AppColors.primaryColor},
+              ]}>
               Lok Sabha Elections 2024
             </Text>
             <Text style={[styles.CardHeading]}>
               28 States & 8 Union Territories
             </Text>
-            <Text style={[styles.CardHeading, {marginBottom: 20,fontSize:25,color:'#3C9900',textDecorationLine:'underline'}]}>
+            <Text
+              style={[
+                styles.CardHeading,
+                {
+                  marginBottom: 20,
+                  fontSize: 25,
+                  color: '#3C9900',
+                  textDecorationLine: 'underline',
+                },
+              ]}>
               Counting on June 04
             </Text>
             <Image
-                      style={{height: 450, width: '100%'}}
-                      resizeMode="contain"
-                      source={require('../../assests/images/2024.png')}
-                    />
-              <View style={{width:'100%',flexDirection:'row',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:5,rowGap:10,marginBottom:20}}>
-                  <Phase phase={1} color={'#FCF38C'}/>
-                  <Phase phase={2} color={'#6DCDF7'}/>
-                  <Phase phase={3} color={'#AC90C3'}/>
-                  <Phase phase={4} color={'#FEBD93'}/>
-                  <Phase phase={5} color={'#FAA0C3'}/>
-                  <Phase phase={6} color={'#6692D1'}/>
-                  <Phase phase={7} color={'#BED85C'}/>
-              </View>
-              <Text style={[styles.CardHeading, {marginBottom: 10,marginTop:20}]}>
+              style={{height: 450, width: '100%'}}
+              resizeMode="contain"
+              source={require('../../assests/images/2024.png')}
+            />
+            <View
+              style={{
+                width: '100%',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: 5,
+                rowGap: 10,
+                marginBottom: 20,
+                paddingHorizontal: 15,
+              }}>
+              <Phase phase={1} color={'#FCF38C'} />
+              <Phase phase={2} color={'#6DCDF7'} />
+              <Phase phase={3} color={'#AC90C3'} />
+              <Phase phase={4} color={'#FEBD93'} />
+              <Phase phase={5} color={'#FAA0C3'} />
+              <Phase phase={6} color={'#6692D1'} />
+              <Phase phase={7} color={'#BED85C'} />
+            </View>
+            <Text
+              style={[styles.CardHeading, {marginBottom: 10, marginTop: 20}]}>
               Parliamentary General Election Results
             </Text>
             <AppDropDown
@@ -526,199 +570,223 @@ const HomeScreen = ({navigation}) => {
                 height: '100%',
                 width: '100%',
                 backgroundColor: '#FFFFFF',
-                borderRadius:20,
-                zIndex:9,
+                borderRadius: 20,
+                zIndex: 9,
               }}
               initialRegion={initialRegion}>
               {selectetdState
                 ? filterJsonData && (
                     <Geojson
-                    tappable
+                      tappable
                       geojson={filterJsonData}
                       strokeColor={AppColors.black}
                       fillColor={AppColors.primaryColor}
                       strokeWidth={0.5}
                       zIndex={9999}
                       backgroundLayerColor="#ffffff"
-                       onPress={handleFeaturePress}
+                      onPress={handleFeaturePress}
                     />
                   )
                 : selectetdState == '' && (
                     <Geojson
-                    tappable
+                      tappable
                       geojson={IndiaJson}
                       strokeColor={AppColors.black}
                       fillColor={AppColors.primaryColor}
                       strokeWidth={0.5}
                       zIndex={9999}
                       backgroundLayerColor="#ffffff"
-                       onPress={handleFeaturePress}
+                      onPress={handleFeaturePress}
                     />
                   )}
             </MapView>
+
             {selectedFeature && (
-        <View style={{ position: 'absolute', top: 20, left: 20, backgroundColor: 'orange',color:'black', padding: 10 ,zIndex:99999999999}}>
-          <Text>{selectedFeature}</Text>
-        </View>
-      )}
-          </View>
-          {electorsData && (
               <View
                 style={{
-                  backgroundColor: AppColors.white,
-                  elevation: 2,
-                  paddingHorizontal: 10,
-                  borderRadius: 6,
+                  position: 'absolute',
+                  top: 20,
+                  left: 20,
+                  backgroundColor: 'orange',
+                  color: 'black',
+                  padding: 10,
+                  zIndex: 99999999999,
                 }}>
-                <TableKeyVauePair
-                  tablekey={'ELECTORS :'}
-                  value={electorsData?.Electors}
-                />
-                <TableKeyVauePair
-                  tablekey={'VOTES POLLE :'}
-                  value={electorsData?.Votes_Polled}
-                />
-                <TableKeyVauePair
-                  tablekey={'TURNOUT:'}
-                  value={electorsData?.Turnout}
-                />
-                <TableKeyVauePair
-                  tablekey={'PARLIAMENTARY CONSTITUENCIES :'}
-                  value={electorsData?.Parliamentary_Constituencies}
-                />
-                <TableKeyVauePair
-                  tablekey={'GENERAL :'}
-                  value={electorsData?.GENERAL}
-                />
-                <TableKeyVauePair tablekey={'SC :'} value={electorsData?.SC} />
-                <TableKeyVauePair tablekey={'ST :'} value={electorsData?.ST} />
+                <Text>{selectedFeature}</Text>
               </View>
             )}
-            {allPartyData && allPartyData.length > 0 && (
-              <View style={styles.container}>
-                <View style={styles.tableHeader}>
-                  <Text style={styles.headerText}>PARTY</Text>
-                  <Text style={styles.headerText}>SEATS</Text>
-                  <Text style={styles.headerText}>VOTES%</Text>
-                </View>
-                {allPartyData &&
-                  allPartyData?.slice(0, 6).map((party, index) => (
-                    <View key={index} style={styles.tableRow}>
-                      <Text style={styles.cellText}>{party?.Party_Name}</Text>
-                      <Text style={styles.cellText}>{party?.Total_Seats}</Text>
-                      <Text style={styles.cellText}>
-                        {party?.Vote_Percentage}
-                      </Text>
-                    </View>
-                  ))}
-              </View>
-            )}
+          </View>
+
+          {electorsData && (
             <View
               style={{
                 backgroundColor: AppColors.white,
-                elevation: 5,
-                alignItems: 'center',
-                paddingVertical: 20,
-                width: '100%',
+                elevation: 2,
+                paddingHorizontal: 10,
                 borderRadius: 6,
+                marginHorizontal: 15,
               }}>
-              <>
-                {DotVotesDatas && DotVotesDatas.length > 0 && (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      flexWrap: 'wrap',
-                      justifyContent: 'space-between',
-                      paddingHorizontal: 10,
-                      marginBottom: 20,
-                    }}>
-                    {DotVotesDatas.map((item, index) => {
-                      return (
+              <TableKeyVauePair
+                tablekey={'ELECTORS :'}
+                value={electorsData?.Electors}
+              />
+              <TableKeyVauePair
+                tablekey={'VOTES POLLE :'}
+                value={electorsData?.Votes_Polled}
+              />
+              <TableKeyVauePair
+                tablekey={'TURNOUT:'}
+                value={electorsData?.Turnout}
+              />
+              <TableKeyVauePair
+                tablekey={'PARLIAMENTARY CONSTITUENCIES :'}
+                value={electorsData?.Parliamentary_Constituencies}
+              />
+              <TableKeyVauePair
+                tablekey={'GENERAL :'}
+                value={electorsData?.GENERAL}
+              />
+              <TableKeyVauePair tablekey={'SC :'} value={electorsData?.SC} />
+              <TableKeyVauePair tablekey={'ST :'} value={electorsData?.ST} />
+            </View>
+          )}
+
+          {/* {--------------------------------DONE---------------------------------} */}
+          {allPartyData && allPartyData.length > 0 && (
+            <View style={styles.container}>
+              <View style={styles.tableHeader}>
+                <Text style={styles.headerText}>PARTY</Text>
+                <Text style={styles.headerText}>SEATS</Text>
+                <Text style={styles.headerText}>VOTES%</Text>
+              </View>
+              {allPartyData &&
+                allPartyData?.slice(0, 6).map((party, index) => (
+                  <View key={index} style={styles.tableRow}>
+                    <Text style={styles.cellText}>{party?.Party_Name}</Text>
+                    <Text style={styles.cellText}>{party?.Total_Seats}</Text>
+                    <Text style={styles.cellText}>
+                      {party?.Vote_Percentage}
+                    </Text>
+                  </View>
+                ))}
+            </View>
+          )}
+
+          {/* {--------------------------------DONE---------------------------------} */}
+          <View
+            style={{
+              backgroundColor: AppColors.white,
+              elevation: 5,
+              alignItems: 'center',
+              paddingVertical: 20,
+              width: '93%',
+              borderRadius: 6,
+              alignSelf: 'center',
+              marginBottom: 10,
+              // marginHorizontal: 15,
+            }}>
+            <>
+              {DotVotesDatas && DotVotesDatas.length > 0 && (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 10,
+                    marginBottom: 20,
+                  }}>
+                  {DotVotesDatas.map((item, index) => {
+                    return (
+                      <View
+                        style={{
+                          justifyContent: 'center',
+                          marginBottom: 10,
+                        }}>
                         <View
                           style={{
-                            justifyContent: 'center',
-                            marginBottom: 10,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            width: 120,
+                            marginRight: 20,
                           }}>
                           <View
                             style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              width: 120,
-                              marginRight: 20,
-                            }}>
-                            <View
-                              style={{
-                                height: 10,
-                                width: 30,
-                                borderRadius: 1,
-                                backgroundColor: item.color,
-                                marginRight: 5,
-                              }}
-                            />
-                            <Text style={{color: AppColors.black, width: 50}}>
-                              {item.Partyname}
-                            </Text>
-                            <Text
-                              style={{color: AppColors.black, marginLeft: 10}}>
-                              {item.votesPercentage}
-                            </Text>
-                          </View>
+                              height: 10,
+                              width: 30,
+                              borderRadius: 1,
+                              backgroundColor: item.color,
+                              marginRight: 5,
+                            }}
+                          />
+                          <Text style={{color: AppColors.black, width: 50}}>
+                            {item.Partyname}
+                          </Text>
+                          <Text
+                            style={{color: AppColors.black, marginLeft: 10}}>
+                            {item.votesPercentage}
+                          </Text>
                         </View>
-                      );
-                    })}
-                  </View>
-                )}
-                {pieDatavotes?.length > 0 && (
-                  <PieChart
+                      </View>
+                    );
+                  })}
+                </View>
+              )}
+
+              {pieDatavotes?.length > 0 && (
+                <PieChart
                   donut
                   innerCircleBorderWidth={6}
                   innerCircleBorderColor="lightgray"
-                    isAnimated={true}
-                    animationDuration={1}
-                    // showText
-                    textColor="black"
-                    shadowWidth={2}
-                    shadow={'red'}
-                    radius={150}
-                    textSize={15}
-                    textBackgroundRadius={26}
-                    data={pieDatavotes}
-                    showValuesAsLabels
-                  />
-                )}
-               {pieDatavotes && <Text
+                  isAnimated={true}
+                  animationDuration={1}
+                  // showText
+                  textColor="black"
+                  shadowWidth={2}
+                  shadow={'red'}
+                  radius={150}
+                  textSize={15}
+                  textBackgroundRadius={26}
+                  data={pieDatavotes}
+                  showValuesAsLabels
+                />
+              )}
+              {pieDatavotes && (
+                <Text
                   style={{color: AppColors.black, marginTop: 10, fontSize: 17}}>
                   Total Votes
-                </Text>}
-              </>
-              <View
-                style={{
-                  marginTop: 30,
-                  alignItems: 'center',
-                }}>
-                {pieDatavotes1 && pieDatavotes1.length > 0 && (
-                  <BarChart
-                    height={300}
-                    textColor="black"
-                    shadowWidth={2}
-                    shadow={'red'}
-                    textSize={15}
-                    barColor={'black'}
-                    data={pieDatavotes1}
-                    yAxisTextStyle={{color: 'black'}}
-                    xAxisLabelTextStyle={{color: 'black', fontSize: 13}}
-                  />
-                )}
-                {pieDatavotes1&&<Text
+                </Text>
+              )}
+            </>
+            <View
+              style={{
+                marginTop: 30,
+                alignItems: 'center',
+              }}>
+              {pieDatavotes1 && pieDatavotes1.length > 0 && (
+                <BarChart
+                  height={300}
+                  textColor="black"
+                  shadowWidth={2}
+                  shadow={'red'}
+                  textSize={15}
+                  barColor={'black'}
+                  data={pieDatavotes1}
+                  yAxisTextStyle={{color: 'black'}}
+                  xAxisLabelTextStyle={{color: 'black', fontSize: 13}}
+                />
+              )}
+              {pieDatavotes1 && (
+                <Text
                   style={{
                     color: AppColors.black,
                     marginTop: 10,
                     fontSize: 17,
                   }}>
                   Total Seats
-                </Text>}
-              </View>
+                </Text>
+              )}
             </View>
+          </View>
           {/* {selectetdState && (
             <View style={{paddingTop: 20, paddingHorizontal: 10}}>
               <Carousel
@@ -851,9 +919,44 @@ const HomeScreen = ({navigation}) => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  container: {height: 100, backgroundColor: 'white'},
+  // container: {backgroundColor: 'white'},
+  container: {
+    padding: 10,
+    backgroundColor: '#fff',
+    marginVertical: 20,
+    elevation: 2,
+    borderRadius: 6,
+    marginHorizontal: 15,
+  },
+  tableRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 5,
+  },
+  tableHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: '#000',
+    marginBottom: 5,
+  },
   text: {fontSize: 14, textAlign: 'center'},
 
+  headerText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: AppColors.black,
+    paddingVertical: 10,
+    width: 90,
+    textAlign: 'center',
+  },
+  cellText: {
+    fontSize: 16,
+    color: AppColors.black,
+    paddingVertical: 10,
+    width: 90,
+    textAlign: 'center',
+  },
   stateCardContainer: {
     backgroundColor: AppColors.white,
     paddingHorizontal: 10,

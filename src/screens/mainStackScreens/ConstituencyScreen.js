@@ -154,7 +154,7 @@ const ConstituencyScreen = ({navigation, route}) => {
   };
 
   const handlegetAllPcNameDataTable = async () => {
-    const data = {year: selectetYear, state: state,id: Constituency};
+    const data = {year: selectetYear, state: state, id: Constituency};
     const res = await getAllPcNameDataTable(data);
     // console.log(
     //   'res of handlegetAllPcNameDataTable--------%%%%%%%%%%%%%%%%% ',
@@ -227,30 +227,30 @@ const ConstituencyScreen = ({navigation, route}) => {
 
   // Fixed colors for top 6 parties
   const partyColors = {
-    'BJP': '#FF6A00',
-    'INC': '#0061FE',
-    'TMC': '#515405',
-    'AIADMK': '#333333',
-    'DMK': '#B51900',
-    'BSP': '#012F7B',
-    'SP': '#263D0F',
-    'NCP': '#3B87FE',
-    'CPI': '#5C0702',
+    BJP: '#FF6A00',
+    INC: '#0061FE',
+    TMC: '#515405',
+    AIADMK: '#333333',
+    DMK: '#B51900',
+    BSP: '#012F7B',
+    SP: '#263D0F',
+    NCP: '#3B87FE',
+    CPI: '#5C0702',
     'CPI (M)': '#FF6252',
     'JD(U)': '#36581B',
-    'LJP': '#52D6FC',
-    'RJD': '#B1DC8A',
-    'TDP': '#FDFC42',
-    'BRS': '#EF719E',
-    'AAP': '#016D90',
-    'NPP': '#F6EC00',
-    'BJD': '#97D35F',
-    'INLD': '#4D7928',
-    'SAD': '#FFAB02',
-    'YSRCP': '#381A94',
+    LJP: '#52D6FC',
+    RJD: '#B1DC8A',
+    TDP: '#FDFC42',
+    BRS: '#EF719E',
+    AAP: '#016D90',
+    NPP: '#F6EC00',
+    BJD: '#97D35F',
+    INLD: '#4D7928',
+    SAD: '#FFAB02',
+    YSRCP: '#381A94',
     'JD(S)': '#76BA3F',
-    'NPF': '#93E3FC',
-    'AIMIM': '#94E3FB'
+    NPF: '#93E3FC',
+    AIMIM: '#94E3FB',
   };
 
   //1st grapth data[-------------------------------------------------------]
@@ -413,8 +413,9 @@ const ConstituencyScreen = ({navigation, route}) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   marginBottom: 20,
-                  borderRadius:10,
-                  shadowColor: Constituency == 1 ? AppColors.primaryColor:AppColors.grey,
+                  borderRadius: 10,
+                  shadowColor:
+                    Constituency == 1 ? AppColors.primaryColor : AppColors.grey,
                   shadowOffset: {
                     width: 0,
                     height: 10,
@@ -438,8 +439,9 @@ const ConstituencyScreen = ({navigation, route}) => {
                     Constituency == 2 ? '#ff8000' : AppColors.grey,
                   justifyContent: 'center',
                   alignItems: 'center',
-                  borderRadius:10,
-                  shadowColor: Constituency == 2 ? AppColors.primaryColor:AppColors.grey,
+                  borderRadius: 10,
+                  shadowColor:
+                    Constituency == 2 ? AppColors.primaryColor : AppColors.grey,
                   shadowOffset: {
                     width: 0,
                     height: 10,
@@ -565,9 +567,9 @@ const ConstituencyScreen = ({navigation, route}) => {
                 )}
                 {pieDatavotes.length > 0 && (
                   <PieChart
-                  donut
-                  innerCircleBorderWidth={6}
-                  innerCircleBorderColor="lightgray"
+                    donut
+                    innerCircleBorderWidth={6}
+                    innerCircleBorderColor="lightgray"
                     isAnimated={true}
                     animationDuration={1}
                     // showText
@@ -812,9 +814,9 @@ const ConstituencyScreen = ({navigation, route}) => {
 
                 {pieDataSeat.length > 0 && (
                   <PieChart
-                  donut
-                  innerCircleBorderWidth={6}
-                  innerCircleBorderColor="lightgray"
+                    donut
+                    innerCircleBorderWidth={6}
+                    innerCircleBorderColor="lightgray"
                     isAnimated={true}
                     animationDuration={1}
                     // showText
@@ -1116,11 +1118,14 @@ const ConstituencyScreen = ({navigation, route}) => {
                             }}>
                             <TouchableOpacity
                               onPress={() =>
-                                navigation.navigate(routes.PCIndiaVotes_Screen, {
-                                  constituency_name: item?.constituency_name,
-                                  year: selectetYear,
-                                  state: state,
-                                })
+                                navigation.navigate(
+                                  routes.PCIndiaVotes_Screen,
+                                  {
+                                    constituency_name: item?.constituency_name,
+                                    year: selectetYear,
+                                    state: state,
+                                  },
+                                )
                               }
                               style={{}}>
                               <Text
@@ -1164,7 +1169,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                                 textAlign: 'center',
                                 color: AppColors.black,
                               }}>
-                              {item?.state_name.replace((/_/g, " "))}
+                              {item?.state_name.replace((/_/g, ' '))}
                             </Text>
                             <Text
                               style={{
@@ -1174,7 +1179,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                                 color: AppColors.black,
                               }}>
                               {/* {item.state_name} */}-{/* district */}
-                              {item.district?.replace((/_/g, " "))}
+                              {item.district?.replace((/_/g, ' '))}
                             </Text>
                             <Text
                               style={{
@@ -1184,7 +1189,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                                 color: AppColors.black,
                               }}>
                               {/* {item.state_name} */}-{/* SubRegion */}
-                              {item.sub_region?.replace((/_/g, " "))}
+                              {item.sub_region?.replace((/_/g, ' '))}
                             </Text>
 
                             <Text
@@ -1223,7 +1228,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                                 textAlign: 'center',
                                 color: AppColors.black,
                               }}>
-                              {item?.sex||item?.gender}
+                              {item?.sex || item?.gender}
                               {/* gender */}
                             </Text>
 
@@ -1244,7 +1249,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                                 textAlign: 'center',
                                 color: AppColors.black,
                               }}>
-                              {item?.prof_main||item?.profession}
+                              {item?.prof_main || item?.profession}
                               {/* PROFFESION */}
                             </Text>
 

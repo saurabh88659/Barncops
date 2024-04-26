@@ -99,30 +99,30 @@ const IndiaVotesScreen = ({navigation, route}) => {
   };
 
   const partyColors = {
-    'BJP': '#FF6A00',
-    'INC': '#0061FE',
-    'TMC': '#515405',
-    'AIADMK': '#333333',
-    'DMK': '#B51900',
-    'BSP': '#012F7B',
-    'SP': '#263D0F',
-    'NCP': '#3B87FE',
-    'CPI': '#5C0702',
+    BJP: '#FF6A00',
+    INC: '#0061FE',
+    TMC: '#515405',
+    AIADMK: '#333333',
+    DMK: '#B51900',
+    BSP: '#012F7B',
+    SP: '#263D0F',
+    NCP: '#3B87FE',
+    CPI: '#5C0702',
     'CPI (M)': '#FF6252',
     'JD(U)': '#36581B',
-    'LJP': '#52D6FC',
-    'RJD': '#B1DC8A',
-    'TDP': '#FDFC42',
-    'BRS': '#EF719E',
-    'AAP': '#016D90',
-    'NPP': '#F6EC00',
-    'BJD': '#97D35F',
-    'INLD': '#4D7928',
-    'SAD': '#FFAB02',
-    'YSRCP': '#381A94',
+    LJP: '#52D6FC',
+    RJD: '#B1DC8A',
+    TDP: '#FDFC42',
+    BRS: '#EF719E',
+    AAP: '#016D90',
+    NPP: '#F6EC00',
+    BJD: '#97D35F',
+    INLD: '#4D7928',
+    SAD: '#FFAB02',
+    YSRCP: '#381A94',
     'JD(S)': '#76BA3F',
-    'NPF': '#93E3FC',
-    'AIMIM': '#94E3FB'
+    NPF: '#93E3FC',
+    AIMIM: '#94E3FB',
   };
 
   //1st grapth data[-------------------------------------------------------]
@@ -513,9 +513,9 @@ const IndiaVotesScreen = ({navigation, route}) => {
                 )}
                 {pieDatavotes.length > 0 && (
                   <PieChart
-                  donut
-                  innerCircleBorderWidth={6}
-                  innerCircleBorderColor="lightgray"
+                    donut
+                    innerCircleBorderWidth={6}
+                    innerCircleBorderColor="lightgray"
                     isAnimated={true}
                     animationDuration={1}
                     // showText
