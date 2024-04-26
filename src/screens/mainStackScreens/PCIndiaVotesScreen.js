@@ -123,20 +123,38 @@ const PCIndiaVotesScreen = ({navigation, route}) => {
     }
   };
 
-  const PieChartColors = [
-    '#177AD5',
-    '#79D2DE',
-    '#ED6665',
-    '#F4B400',
-    '#06A77D',
-    '#B83A87',
-  ];
+  const partyColors = {
+    'BJP': '#FF6A00',
+    'INC': '#0061FE',
+    'TMC': '#515405',
+    'AIADMK': '#333333',
+    'DMK': '#B51900',
+    'BSP': '#012F7B',
+    'SP': '#263D0F',
+    'NCP': '#3B87FE',
+    'CPI': '#5C0702',
+    'CPI (M)': '#FF6252',
+    'JD(U)': '#36581B',
+    'LJP': '#52D6FC',
+    'RJD': '#B1DC8A',
+    'TDP': '#FDFC42',
+    'BRS': '#EF719E',
+    'AAP': '#016D90',
+    'NPP': '#F6EC00',
+    'BJD': '#97D35F',
+    'INLD': '#4D7928',
+    'SAD': '#FFAB02',
+    'YSRCP': '#381A94',
+    'JD(S)': '#76BA3F',
+    'NPF': '#93E3FC',
+    'AIMIM': '#94E3FB'
+  };
 
   //1st grapth data[-------------------------------------------------------]
   const pieDatavotes =  data&&data.slice(0, 6)?.map((party, index) => {
     return {
       value: party?.votes,
-      color: PieChartColors[index],
+      color: partyColors[party?.party_name] || '#000000',
       text: party?.votes,
     };
   });
@@ -144,7 +162,7 @@ const PCIndiaVotesScreen = ({navigation, route}) => {
   const pieDatavotes1 = data&&data.slice(0, 6)?.map((party, index) => {
     return {
       value: party?.vote_percentage,
-      frontColor: PieChartColors[index],
+      frontColor: partyColors[party?.party_name] || '#000000',
       text: `${party?.vote_percentage.toFixed(2)}%`,
       label: party?.party_name,
       topLabelComponent: () => (
@@ -159,7 +177,7 @@ const PCIndiaVotesScreen = ({navigation, route}) => {
     return {
       Partyname: party?.party_name,
       totalVotes: party?.votes,
-      color: PieChartColors[index],
+      color: partyColors[party?.party_name] || '#000000',
       votesPercentage:party?.votes,
     };
   });
@@ -410,6 +428,9 @@ const PCIndiaVotesScreen = ({navigation, route}) => {
                 )}
                 {pieDatavotes.length > 0 && (
                   <PieChart
+                  donut
+                  innerCircleBorderWidth={6}
+                  innerCircleBorderColor="lightgray"
                     isAnimated={true}
                     animationDuration={1}
                     // showText

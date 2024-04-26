@@ -17,14 +17,14 @@ const AppDropDown = ({ valueField = 'label', labelField = 'labelField', search =
             </Text>
             <Dropdown
                 style={[styles.dropdown,]}
-                iconColor={AppColors.black}
+                iconColor={AppColors.primaryColor}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
                 itemTextStyle={{ color: AppColors.black }}
-                containerStyle={{ backgroundColor: AppColors.white }}
-                activeColor='#387cd8'
+                containerStyle={{ backgroundColor:'#FFF6ED' }}
+                activeColor='#fff'
                 data={data}
                 search={search}
                 maxHeight={300}
@@ -47,15 +47,16 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: AppColors.white,
         // height: 80,
-        // backgroundColor: 'red'
+        // backgroundColor: '#FD8000'
     },
     dropdown: {
         height: 48,
         paddingLeft: 15,
-        borderRadius: 5,
+        borderRadius: 10,
         paddingHorizontal: 8,
-        elevation: 5,
-        backgroundColor: AppColors.white,
+        // elevation: 5,
+        // backgroundColor: AppColors.white,
+        backgroundColor:'#FFF6ED'
 
     },
     icon: {
@@ -74,11 +75,14 @@ const styles = StyleSheet.create({
 
     placeholderStyle: {
         fontSize: 16,
-        color: AppColors.black
+        fontWeight:'bold',
+        // color: AppColors.black
+        color:'#FD8000',
     },
     selectedTextStyle: {
         fontSize: 16,
-        color: '#000'
+        fontWeight:'bold',
+        color:'#FD8000',
 
     },
     iconStyle: {

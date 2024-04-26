@@ -217,7 +217,7 @@ const ConstituencyScreen = ({navigation, route}) => {
           style={{
             fontSize: 15,
             fontWeight: '700',
-            color: AppColors.dark_grey,
+            color: AppColors.primaryColor,
           }}>
           {value}
         </Text>
@@ -226,20 +226,38 @@ const ConstituencyScreen = ({navigation, route}) => {
   };
 
   // Fixed colors for top 6 parties
-  const PieChartColors = [
-    '#177AD5',
-    '#79D2DE',
-    '#ED6665',
-    '#F4B400',
-    '#06A77D',
-    '#B83A87',
-  ];
+  const partyColors = {
+    'BJP': '#FF6A00',
+    'INC': '#0061FE',
+    'TMC': '#515405',
+    'AIADMK': '#333333',
+    'DMK': '#B51900',
+    'BSP': '#012F7B',
+    'SP': '#263D0F',
+    'NCP': '#3B87FE',
+    'CPI': '#5C0702',
+    'CPI (M)': '#FF6252',
+    'JD(U)': '#36581B',
+    'LJP': '#52D6FC',
+    'RJD': '#B1DC8A',
+    'TDP': '#FDFC42',
+    'BRS': '#EF719E',
+    'AAP': '#016D90',
+    'NPP': '#F6EC00',
+    'BJD': '#97D35F',
+    'INLD': '#4D7928',
+    'SAD': '#FFAB02',
+    'YSRCP': '#381A94',
+    'JD(S)': '#76BA3F',
+    'NPF': '#93E3FC',
+    'AIMIM': '#94E3FB'
+  };
 
   //1st grapth data[-------------------------------------------------------]
   const pieDatavotes = allPartyData.slice(0, 6)?.map((party, index) => {
     return {
       value: party?.Total_Votes,
-      color: PieChartColors[index],
+      color: partyColors[party?.Party_Name] || '#000000',
       text: `${party?.Vote_Percentage.toFixed(2)}%`,
     };
   });
@@ -247,7 +265,7 @@ const ConstituencyScreen = ({navigation, route}) => {
   const pieDatavotes1 = allPartyData.slice(0, 6)?.map((party, index) => {
     return {
       value: party?.Total_Seats,
-      frontColor: PieChartColors[index],
+      frontColor: partyColors[party?.Party_Name] || '#000000',
       text: party?.Total_Seats,
       label: party?.Party_Name,
       topLabelComponent: () => (
@@ -262,7 +280,7 @@ const ConstituencyScreen = ({navigation, route}) => {
     return {
       Partyname: party?.Party_Name,
       totalVotes: party?.Total_Votes,
-      color: PieChartColors[index],
+      color: partyColors[party?.Party_Name] || '#000000',
       votesPercentage: `${party?.Vote_Percentage.toFixed(2)}%`,
     };
   });
@@ -339,7 +357,7 @@ const ConstituencyScreen = ({navigation, route}) => {
       ) : (
         <ScrollView>
           <View style={{paddingHorizontal: 15, paddingVertical: 10}}>
-            <Text
+            {/* <Text
               style={{
                 fontSize: 25,
                 color: AppColors.black,
@@ -348,7 +366,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                 marginVertical: 20,
               }}>
               {state.replace("_"," ")}
-            </Text>
+            </Text> */}
 
             {/* <Text
               style={{
@@ -360,7 +378,16 @@ const ConstituencyScreen = ({navigation, route}) => {
               }}>
               {selectetYear}
             </Text> */}
-
+            {/* <Text
+              style={{
+                fontSize: 25,
+                color: AppColors.black,
+                fontWeight: '700',
+                alignSelf: 'center',
+                marginVertical: 20,
+              }}>
+              Lok Sabha Elections 2024
+            </Text> */}
             <AppDropDown
               style={{marginTop: 10}}
               height={80}
@@ -386,6 +413,16 @@ const ConstituencyScreen = ({navigation, route}) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   marginBottom: 20,
+                  borderRadius:10,
+                  shadowColor: Constituency == 1 ? AppColors.primaryColor:AppColors.grey,
+                  shadowOffset: {
+                    width: 0,
+                    height: 10,
+                  },
+                  shadowOpacity: 0.5,
+                  shadowRadius: 4.65,
+
+                  elevation: 7,
                 }}>
                 <Text style={{color: AppColors.white, fontWeight: '800'}}>
                   Parliamentary Constituency
@@ -401,6 +438,16 @@ const ConstituencyScreen = ({navigation, route}) => {
                     Constituency == 2 ? '#ff8000' : AppColors.grey,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  borderRadius:10,
+                  shadowColor: Constituency == 2 ? AppColors.primaryColor:AppColors.grey,
+                  shadowOffset: {
+                    width: 0,
+                    height: 10,
+                  },
+                  shadowOpacity: 0.5,
+                  shadowRadius: 4.65,
+
+                  elevation: 7,
                 }}>
                 <Text style={{color: AppColors.white, fontWeight: '800'}}>
                   Assembly Constituency
@@ -518,6 +565,9 @@ const ConstituencyScreen = ({navigation, route}) => {
                 )}
                 {pieDatavotes.length > 0 && (
                   <PieChart
+                  donut
+                  innerCircleBorderWidth={6}
+                  innerCircleBorderColor="lightgray"
                     isAnimated={true}
                     animationDuration={1}
                     // showText
@@ -762,6 +812,9 @@ const ConstituencyScreen = ({navigation, route}) => {
 
                 {pieDataSeat.length > 0 && (
                   <PieChart
+                  donut
+                  innerCircleBorderWidth={6}
+                  innerCircleBorderColor="lightgray"
                     isAnimated={true}
                     animationDuration={1}
                     // showText
