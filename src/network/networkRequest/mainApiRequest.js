@@ -9,9 +9,14 @@ export const getState = async obj => {
   }
 };
 
-export const getYear = async () => {
+export const getYear = async (data) => {
+  const {id} = data;
+  const URL=
+  id==1
+    ?`${BASE_URL}data/year/`
+    :`${BASE_URL}vidhan-sabha/year/`
   try {
-    const result = Instance('GET', BASE_URL + 'data/year/', null, {});
+    const result = Instance('GET',URL, null, {});
     return result;
   } catch (e) {
     return e;
@@ -62,6 +67,17 @@ export const getAllPartyData = async data => {
   }
 };
 
+export const getIndiaPCData = async data => {
+  const {year} = data;
+  const URL =`${BASE_URL}data/india/?year=${year}`;
+  try {
+    const result = Instance('GET', URL, null, {});
+    return result;
+  } catch (e) {
+    return e;
+  }
+};
+
 export const getNdaAllianceData = async data => {
   const {year, state, id} = data;
   console.log('data of nda--------', data);
@@ -96,7 +112,7 @@ export const getAllPcNameDataTable = data => {
   const URL=
     id==1
       ?`${BASE_URL}data/all-pc-name-state/?state_name=${state}&year=${year}`
-      :`${BASE_URL}vidhan-sabha/all-pc-name-state/?state_name=${state}&year=${year}`
+      :`${BASE_URL}vidhan-sabha/all-ac-name-state/?state_name=${state}&year=${year}`
   try {
     const result = Instance(
       'GET',

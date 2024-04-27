@@ -8,13 +8,15 @@ import {
   StatusBar,
   ActivityIndicator,
   Dimensions,
+  Alert,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {AppColors} from '../../assests/AppColors';
 import {
   getAllPartyData,
   getConstituencyData,
   getConstituencyElectorsData,
+  getIndiaPCData,
   getState,
   getYear,
 } from '../../network/networkRequest/mainApiRequest';
@@ -29,11 +31,13 @@ import AppHeader from '../../components/AppHeader';
 import MapView, {Geojson, PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import IndiaJson from '../../assests/MapJson/India.json';
 import Carousel from 'react-native-snap-carousel';
-import {setOfflineData} from '../../network/commonServices';
+import {BASE_URL, setOfflineData} from '../../network/commonServices';
 import {configureLayoutAnimationBatch} from 'react-native-reanimated/lib/typescript/reanimated2/core';
 import {centeredLatitudeAndLongitude} from '../../utils/centeredLatitudeAndLongitudeData';
 import Phase from '../../components/Phase';
 import {BarChart, PieChart} from 'react-native-gifted-charts';
+import axios from 'axios';
+import { FadeIn } from 'react-native-reanimated';
 
 const HomeScreen = ({navigation}) => {
   const disPatch = useDispatch();
@@ -51,10 +55,11 @@ const HomeScreen = ({navigation}) => {
   );
   const [selectetdState, setSelectedState] = useState('');
   const [selectedYear, setSelectedYear] = useState(2019);
-  const [screenLoading, setScreenLoading] = useState('');
+  const [screenLoading, setScreenLoading] = useState(true);
   const [filterJsonData, setFilteredData] = useState([]);
   const [selectedShowStateName, setSelectedShowStateName] = useState('');
   const [refresh, setRefresh] = useState(false);
+  const [indiaPCData,setIndiaPCData]=useState('');
   const [initialRegion, setinitialRegion] = useState({
     latitude: 20.5937,
     longitude: 78.9629,
@@ -188,19 +193,20 @@ const HomeScreen = ({navigation}) => {
     // setSelectedState('');
     setScreenLoading(true);
     Promise.all([
+      handleGetIndiaPCData(),
       handleGetState(),
       handleGetYear(),
       handleGetConstituencyElectorsData(),
       handleGetAllPartyData(),
     ])
       .then((res, rej) => {
-        setScreenLoading(false);
+          setScreenLoading(false);
       })
       .catch(error => {
-        console.error('Error occurred while fetching data:', error);
-        setScreenLoading(false);
+          console.error('Error occurred while fetching data:', error);
+          setScreenLoading(false); 
       });
-  }, [selectedYear]);
+  }, [selectedYear,selectetdState]);
 
   const handleGetState = async () => {
     const res = await getState();
@@ -209,6 +215,10 @@ const HomeScreen = ({navigation}) => {
     //   res.data.data,
     // );
     if (res.success) {
+    //   const modifiedData = res.data.data.map(state => ({
+    //     ...state,
+    //     state_name: state.state_name.replace(/_/g, ' ') // Replace underscore with space
+    // }));
       disPatch(setStates(res.data.data));
     } else {
       console.log('error of handleGetState------', res.data);
@@ -216,7 +226,8 @@ const HomeScreen = ({navigation}) => {
   };
 
   const handleGetYear = async () => {
-    const res = await getYear();
+    const data={id:1}
+    const res = await getYear(data);
     console.log(
       're of get year===========================222222222222222222222',
       res.data.data,
@@ -241,17 +252,79 @@ const HomeScreen = ({navigation}) => {
     }
   };
 
+
+  const getColor = (pcName, winnerParty) => {
+    // Use the winner party to determine the fill color for each PC
+    return partyColors[winnerParty] || '#CCCCCC'; // Default color if party color not found
+  };
+
+  const getColorIndia = (feature, pcData) => {
+    const pcName = (feature.properties.pc_name.toUpperCase());
+    const winnerParty = pcData[pcName]?.winner?.party;
+    return partyColors[winnerParty] || '#CCCCCC';
+  };
+  
+  // const getFiteredJson = async (geojsonData, stateName) => {
+  //   // setSelectedState(TestState);
+  //   const filteredFeatures = geojsonData.features.filter(
+  //     feature => feature.properties.st_name === stateName,
+  //   );
+  //   setFilteredData({
+  //     ...geojsonData,
+  //     features: filteredFeatures,
+  //   });
+  // };
+
   const getFiteredJson = async (geojsonData, stateName) => {
-    // setSelectedState(TestState);
     const filteredFeatures = geojsonData.features.filter(
-      feature => feature.properties.st_name === stateName,
+      feature => feature.properties.st_name === stateName
     );
+  
+    // Colorize the filtered features based on PC winner party
+    const colorizedFeatures = filteredFeatures.map(feature => {
+      const pcName = (feature.properties.pc_name).toUpperCase();
+      const winnerParty = indiaPCData[pcName]?.winner?.party || null; // Get winner party for current PC
+      return {
+        ...feature,
+        properties: {
+          ...feature.properties,
+          fill: getColor(pcName, winnerParty) // Set fill color based on winner party
+        }
+      };
+    });
+  
+    // Update state with colorized GeoJSON data
     setFilteredData({
       ...geojsonData,
-      features: filteredFeatures,
+      features: colorizedFeatures
     });
   };
 
+
+  const getIndiaJson = async (geojsonData, stateName) => {
+    // const filteredFeatures = geojsonData.features.filter(
+    //   feature => feature.properties.st_name === stateName
+    // );
+  
+    // Colorize the filtered features based on PC winner party
+    const colorizedFeatures = filteredFeatures.map(feature => {
+      const pcName = (feature.properties.pc_name).toUpperCase();
+      const winnerParty = indiaPCData[pcName]?.winner?.party || null; // Get winner party for current PC
+      return {
+        ...feature,
+        properties: {
+          ...feature.properties,
+          fill: getColor(pcName, winnerParty) // Set fill color based on winner party
+        }
+      };
+    });
+  
+    // Update state with colorized GeoJSON data
+    setFilteredData({
+      ...geojsonData,
+      features: colorizedFeatures
+    });
+  };
   // useEffect(() => {
   //   hanldeGetPcName();
   // }, [selectedYear, selectetdState]);
@@ -271,14 +344,33 @@ const HomeScreen = ({navigation}) => {
   //     }
   //   }
   // };
+  const [pcName,setPCName]=useState('')
+  const indiaPCDataRef = useRef(indiaPCData);
+  
+  useEffect(() => {
+    indiaPCDataRef.current = indiaPCData;
+  }, [selectedYear]);
 
-  const handleFeaturePress = event => {
-    console.log(event.feature.properties.pc_name);
-    // const { properties } = event.feature;
-    setSelectedFeature(event.feature.properties.pc_name);
-  };
+  // const handleFeaturePress = event => {
+  //   // console.log(event.feature.properties.pc_name);
+  //   // console.log(indiaPCData['AGRA'])
+  //   const constituencyName = (event.feature.properties.pc_name).toUpperCase();
+  //   setPCName(constituencyName);
+  //   const data = indiaPCData[constituencyName];
+  //   console.log(data,"=#$%#$%#$%#$%#$%#$%#$%#$%$#%#$%#$%$#%#$%#$%#$%#$%$#%#$%#$%#$%#$%#$%#$%#$%#$%#$%#$%#$%#$%#$%#$%#$%#$%#$%");
+  //   setSelectedFeature(data);
+  // };
 
+  // const getFillColor = event => {
+  //   console.log(event.feature.properties.pc_name,'=????????????#$#$?!#>!#!?!#>>!?!>!#!!?!!>@$?!$?!>!$?#>?$>>?#!>?$>?!#>?$>?!>#>$>!?!?$>?!>!?!>>!>!?!>>?!>?>?!>?$>?!>?$>?!>!!>?!!>?!>>!$>?#>$?##');
+  //   const upperpcName=constituencyName.toUpperCase();
+
+  //   const winnerParty = indiaPCData[upperpcName]?.winner?.party;
+  //   // Define color mappings for parties
+  //   return partyColors[winnerParty] || AppColors.black;
+  // };
   ///
+
 
   const handleGetConstituencyElectorsData = async () => {
     const data = {year: selectedYear, state: selectetdState, id: 1};
@@ -392,6 +484,63 @@ const HomeScreen = ({navigation}) => {
       // console.log('error of handleGetAllPartyData-----', res.data);
     }
   };
+
+  const handleGetIndiaPCData = async () => {
+    // Alert.alert('working')
+    const data = { year: selectedYear };
+    try {
+      const res = await getIndiaPCData(data);
+      if (res.success) {
+        const latestData = res.data.data.constituency_data;
+        // setIndiaPCData(null);
+        setIndiaPCData(latestData);
+      } else {
+        setIndiaPCData('');
+        // console.log('error of handleGetAllPartyData-----', res.data);
+      }
+    } catch (error) {
+      console.error('Error occurred while fetching India PC data:', error);
+      setIndiaPCData('');
+    }
+  };
+
+
+  const selectedYearRef = useRef(selectedYear);
+
+
+  const handleFeaturePress = event => {
+    // Alert.alert('working');
+    setSelectedFeature(null);
+    const constituencyName = (event.feature.properties.pc_name).toUpperCase();
+    setPCName(constituencyName);
+    const data = indiaPCData[constituencyName];
+    // Alert.alert(JSON.stringify(data));
+    // Alert.alert(JSON.stringify(data));
+    setSelectedFeature(data);
+  };
+
+
+  // const handleGetIndiaPCData = () => {
+  //   // Alert.alert(selectedYear);
+  //   axios.get(`${BASE_URL}data/india/?year=${selectedYear}`)
+  //     .then(res => {
+  //       const latestData = res.data.constituency_data;
+  //       setIndiaPCData(prevData => {
+  //         return latestData;
+  //       });
+  //       setTimeout(() => {
+  //         setScreenLoading(false);
+  //       }, 5000);
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // };
+  
+  // useEffect(() => {
+  //   setScreenLoading(true);
+  //   handleGetIndiaPCData();
+  // }, [selectedYear]);
 
   return (
     <View style={{flex: 1, backgroundColor: AppColors.white}}>
@@ -514,26 +663,30 @@ const HomeScreen = ({navigation}) => {
               data={states}
               onChange={item => {
                 getFiteredJson(IndiaJson, item.state_name);
-                setSelectedState(item.state_name);
+                setSelectedState(item.state_name.replace("_"," "));
               }}
               value={selectetdState?.state_name}
               labelField="state_name"
               valueField="state_name"
               labelText="Select State"
-              placeholder="--Select State--"
+              placeholder={selectetdState?`${selectetdState.replace("_"," ")}`:"--Select State--"}
             />
             <AppDropDown
               style={{marginTop: 10}}
               height={80}
               data={year}
               onChange={item => {
+                setScreenLoading(true);
                 setSelectedYear(item?.year);
+                setTimeout(() => {
+                  setScreenLoading(false)
+                }, 1000);
               }}
               value={selectedYear}
               labelField="year"
               valueField="year"
               labelText="Select Year"
-              placeholder="--Select Year--"
+              placeholder={`${selectedYear}`}
             />
           </View>
           {/* <TouchableOpacity
@@ -580,44 +733,69 @@ const HomeScreen = ({navigation}) => {
                       tappable
                       geojson={filterJsonData}
                       strokeColor={AppColors.black}
-                      fillColor={AppColors.primaryColor}
+                      // fill={getFillColor}
                       strokeWidth={0.5}
                       zIndex={9999}
                       backgroundLayerColor="#ffffff"
                       onPress={handleFeaturePress}
+
                     />
                   )
                 : selectetdState == '' && (
                     <Geojson
                       tappable
-                      geojson={IndiaJson}
+                      // geojson={IndiaJson}
                       strokeColor={AppColors.black}
-                      fillColor={AppColors.primaryColor}
+                      // fill={getFillColor}
                       strokeWidth={0.5}
                       zIndex={9999}
                       backgroundLayerColor="#ffffff"
                       onPress={handleFeaturePress}
+                      geojson={{
+                        ...IndiaJson,
+                        features: IndiaJson.features.map((feature) => ({
+                          ...feature,
+                          properties: {
+                            ...feature.properties,
+                            fill: getColorIndia(feature, indiaPCData)
+                          }
+                        }))
+                      }}
                     />
                   )}
             </MapView>
 
             {selectedFeature && (
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 20,
-                  left: 20,
-                  backgroundColor: 'orange',
-                  color: 'black',
-                  padding: 10,
-                  zIndex: 99999999999,
-                }}>
-                <Text>{selectedFeature}</Text>
+              <View style={{width:'100%',height:150, position: 'absolute',display:'flex',alignItems:'flex-start',justifyContent:'space-evenly', top: 20, left: 20, backgroundColor:AppColors.primaryColor, padding: 10,zIndex:999999,borderRadius:5 }}>
+                <View style={{width:'100%',alignItems:'center',justifyContent:'space-between',flexDirection:'row'}}>
+                <Text style={{fontWeight:700,color:AppColors.white,textDecorationLine:'underline'}}>{pcName}</Text>
+                <Text onPress={()=>setSelectedFeature()}>✕</Text>
+                </View>
+                <View style={{width:'90%',display:'flex',alignItems:'center',justifyContent:'space-between',flexDirection:'row',}}>
+                  <View style={{display:'flex',alignItems:'flex-start',justifyContent:'flex-start'}}>
+                    <Text style={{fontWeight:700,color:AppColors.white,textDecorationLine:'underline'}}>Winner</Text>
+                    <Text>PARTY: {selectedFeature.winner.party}</Text>
+                    <Text>VOTES: {selectedFeature.winner.total_votes}</Text>
+                    <Text>CANDIDATE NAME:</Text>
+                    <Text style={{fontSize:12}}>{selectedFeature.winner.candidate_name}</Text>
+
+                  </View>
+
+                  <View style={{display:'flex',alignItems:'flex-start',justifyContent:'flex-start'}}>
+                    <Text style={{fontWeight:700,color:AppColors.white,textDecorationLine:'underline'}}>Runner-up</Text>
+                    <Text>PARTY: {selectedFeature.runner_up.party}</Text>
+                    <Text>VOTES: {selectedFeature.runner_up.total_votes}</Text>
+                    <Text>CANDIDATE NAME:</Text>
+                    <Text style={{fontSize:12}}>{selectedFeature.runner_up.candidate_name}</Text>
+
+                  </View>
+                </View>
+                
               </View>
-            )}
+              )}
           </View>
 
-          {electorsData && (
+          {electorsData  && selectetdState && (
             <View
               style={{
                 backgroundColor: AppColors.white,
@@ -652,7 +830,7 @@ const HomeScreen = ({navigation}) => {
           )}
 
           {/* {--------------------------------DONE---------------------------------} */}
-          {allPartyData && allPartyData.length > 0 && (
+          {allPartyData && selectetdState && allPartyData.length > 0 && (
             <View style={styles.container}>
               <View style={styles.tableHeader}>
                 <Text style={styles.headerText}>PARTY</Text>
@@ -673,7 +851,7 @@ const HomeScreen = ({navigation}) => {
           )}
 
           {/* {--------------------------------DONE---------------------------------} */}
-          <View
+          {selectetdState && <View
             style={{
               backgroundColor: AppColors.white,
               elevation: 5,
@@ -786,7 +964,7 @@ const HomeScreen = ({navigation}) => {
                 </Text>
               )}
             </View>
-          </View>
+          </View>}
           {/* {selectetdState && (
             <View style={{paddingTop: 20, paddingHorizontal: 10}}>
               <Carousel

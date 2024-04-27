@@ -9,7 +9,7 @@ const TopFivePatryCard = ({
 }) => {
   return (
     <TouchableOpacity style={styles.stateCard}>
-      <View
+      {/* <View
         style={{
           height: 70,
           width: 70,
@@ -23,7 +23,7 @@ const TopFivePatryCard = ({
           style={{height: 45, width: 45}}
           source={require('../assests/images/partyLogo/bjp.png')}
         />
-      </View>
+      </View> */}
       <Text
         style={{
           color: AppColors.black,
@@ -49,9 +49,10 @@ const TopFivePatryCard = ({
         }}>
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'flex-start',
-            width: '60%',
+            // flexDirection: 'row',
+            alignItems: 'flex-center',
+            justifyContent:'center',
+            width: '100%',
             marginBottom: 5,
           }}>
           <Text
@@ -76,9 +77,10 @@ const TopFivePatryCard = ({
 
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'flex-start',
-            width: '50%',
+            // flexDirection: 'row',
+            alignItems: 'flex-center',
+            justifyContent:'center',
+            width: '100%',
           }}>
           <Text
             style={{

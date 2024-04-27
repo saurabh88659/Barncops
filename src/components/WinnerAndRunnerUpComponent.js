@@ -47,7 +47,7 @@ const WinnerAndRunnerUpComponent = ({WinnerPatry, Votes}) => {
           paddingHorizontal: 15,
           paddingVertical: 10,
         }}>
-        <View
+        {/* <View
           style={{
             height: 70,
             width: 70,
@@ -62,9 +62,9 @@ const WinnerAndRunnerUpComponent = ({WinnerPatry, Votes}) => {
             style={{height: 45, width: 45}}
             source={require('../assests/images/partyLogo/bjp.png')}
           />
-        </View>
+        </View> */}
 
-        <View style={{alignItems: 'flex-start'}}>
+        <View style={{alignItems: 'flex-center',flexDirection:'row',justifyContent:'center'}}>
           <Text
             style={{
               color: AppColors.black,

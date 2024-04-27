@@ -9,6 +9,7 @@ import {
   TextInput,
   ActivityIndicator,
   Touchable,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {AppColors} from '../../assests/AppColors';
@@ -27,6 +28,7 @@ import {
   getFilterSearchData,
   getNdaAllianceData,
   getUpaAllianceData,
+  getYear,
 } from '../../network/networkRequest/mainApiRequest';
 import AppHeader from '../../components/AppHeader';
 import AppTextInputWithLabel from '../../components/AppTextInputWithLabel';
@@ -35,8 +37,8 @@ import AppTextInpuWithoutIcon from '../../components/AppTextInpuWithoutIcon';
 import {routes} from '../../shells/routes';
 
 const ConstituencyScreen = ({navigation, route}) => {
-  const year = useSelector(state => state.appData.year);
-  console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@year===============>>>', year);
+  // const year = useSelector(state => state.appData.year);
+  // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@year===============>>>', year);
   const yearRoute = route.params.year;
 
   // console.log(year);
@@ -62,6 +64,8 @@ const ConstituencyScreen = ({navigation, route}) => {
   const [upaData, SetUpaData] = useState('');
   const [screenLoading, setScreenLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  // const [selectedYear,setSelectedYear]=useState(2019)
+  const [formattedYears,setFormattedYears]=useState('');
 
   const [CandidateSearch, SetCandidateSearch] = useState('');
   const [marginPercentagSearch, SetMarginPercentagSearch] = useState('');
@@ -77,6 +81,7 @@ const ConstituencyScreen = ({navigation, route}) => {
   useEffect(() => {
     setScreenLoading(true);
     Promise.all([
+      handleGetYear(),
       handleGetConstituencyElectorsData(),
       handleGetAllPartyData(),
       handleGetNdaAllianceData(),
@@ -99,7 +104,38 @@ const ConstituencyScreen = ({navigation, route}) => {
     // setScreenLoading(false);
   }, [Constituency, state, selectetYear]);
 
+  const handleGetYear = async () => {
+    const data={id:Constituency}
+    const res = await getYear(data);
+    console.log(
+      're of get year===========================222222222222222222222',
+      res.data.data,
+    );
+
+    if (res.success) {
+      // const formattedYears = res.data.data.map(item => ({
+      //   ...item,
+      //   // year: parseInt(item.year),
+      //   year: isNaN(parseInt(item.year)) ? null : parseInt(item.year),
+      // }));
+      // disPatch(setYear(formattedYears));
+
+      const formattedYears = res.data.data.map(item => ({
+        ...item,
+        year: item.year.toString(), // Convert year to string
+      }));
+      console.log(formattedYears,'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+      setFormattedYears(formattedYears);
+      // setSelectedYear(formattedYears[0]);
+      // disPatch(setYear(formattedYears));
+      // disPatch(setYear(res.data.data));
+    } else {
+      console.log('error of handleGetYear------', res.success);
+    }
+  };
+
   const handleGetConstituencyElectorsData = async () => {
+    // Alert.alert(selectetYear);
     const data = {year: selectetYear, state: state, id: Constituency};
     const res = await getConstituencyElectorsData(data);
     // console.log(
@@ -388,19 +424,29 @@ const ConstituencyScreen = ({navigation, route}) => {
               }}>
               Lok Sabha Elections 2024
             </Text> */}
-            <AppDropDown
+            <Text
+              style={{
+                fontSize: 25,
+                color: AppColors.black,
+                fontWeight: '700',
+                alignSelf: 'center',
+                marginVertical: 2,
+              }}>
+              {state.replace("_"," ")}
+            </Text>
+           {formattedYears && <AppDropDown
               style={{marginTop: 10}}
               height={80}
-              data={year}
+              data={formattedYears}
               onChange={item => {
-                setSelectedYear(item?.year);
+                setSelectedYear(item.year);
               }}
               value={selectetYear}
               labelField="year"
               valueField="year"
               labelText="Select Year"
-              placeholder="--Select Year--"
-            />
+              placeholder={`${selectetYear}`}
+            />}
 
             <View style={{alignItems: 'center', paddingVertical: 25}}>
               <TouchableOpacity
@@ -478,8 +524,8 @@ const ConstituencyScreen = ({navigation, route}) => {
                   value={electorsData?.Turnout}
                 />
                 <TableKeyVauePair
-                  tablekey={'PARLIAMENTARY CONSTITUENCIES :'}
-                  value={electorsData?.Parliamentary_Constituencies}
+                  tablekey={Constituency==1?'PARLIAMENTARY CONSTITUENCIES :':'ASSEMBLY CONSTITUENCIES :'}
+                  value={electorsData?.Parliamentary_Constituencies||electorsData?.total_ac}
                 />
                 <TableKeyVauePair
                   tablekey={'GENERAL :'}
@@ -929,22 +975,22 @@ const ConstituencyScreen = ({navigation, route}) => {
                     <Text
                       style={{
                         fontWeight: 'bold',
-                        width: 250,
+                        width: 200,
                         textAlign: 'center',
                         color: AppColors.white,
                         // backgroundColor: 'green',
                       }}>
-                      AC NAME
+                      {Constituency==1?'PC NAME':'AC NAME'}
                     </Text>
                     <Text
                       style={{
                         fontWeight: 'bold',
-                        width: 40,
+                        width: 150,
                         textAlign: 'center',
                         color: AppColors.white,
                         // backgroundColor: 'red',
                       }}>
-                      NO
+                      {Constituency==1?'PC NUMBER':'AC NUMBER'}
                     </Text>
 
                     <Text
@@ -1116,7 +1162,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                               marginBottom: 15,
                               paddingVertical: 10,
                             }}>
-                            <TouchableOpacity
+                           {Constituency==1 ? <TouchableOpacity
                               onPress={() =>
                                 navigation.navigate(
                                   routes.PCIndiaVotes_Screen,
@@ -1131,27 +1177,34 @@ const ConstituencyScreen = ({navigation, route}) => {
                               <Text
                                 style={{
                                   fontWeight: 'bold',
-                                  width: 250,
+                                  width: 200,
                                   textAlign: 'center',
                                   color: AppColors.oxfordBlue,
                                   textDecorationLine: 'underline',
                                   // backgroundColor: 'green',
                                 }}>
-                                {item?.constituency_name}
+                                {item.constituency_name}
                               </Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity>:<Text
+                                style={{
+                                  fontWeight: 'bold',
+                                  width: 200,
+                                  textAlign: 'center',
+                                  color: AppColors.black,
+                                  // textDecorationLine: 'underline',
+                                  // backgroundColor: 'green',
+                                }}>
+                                {item.ac_name}
+                              </Text>}
                             <Text
                               style={{
                                 fontWeight: 'bold',
-                                width: 40,
+                                width: 150,
                                 textAlign: 'center',
                                 color: AppColors.black,
                                 // backgroundColor: 'red',
                               }}>
-                              {item.constituency_no?.replace(
-                                /(\d+)\.0\b/g,
-                                '$1',
-                              )}
+                              {item.constituency_no || item.ac_no}
                             </Text>
                             <Text
                               style={{
@@ -1160,7 +1213,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                                 textAlign: 'center',
                                 color: AppColors.black,
                               }}>
-                              {item.candidate_Type || '-'}
+                              {item.candidate_Type || item.ac_type}
                             </Text>
                             <Text
                               style={{
