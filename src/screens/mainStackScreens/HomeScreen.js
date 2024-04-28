@@ -475,13 +475,16 @@ const HomeScreen = ({navigation}) => {
 
   const handleGetAllPartyData = async () => {
     const data = {year: selectedYear, state: selectetdState, id: 1};
+    // Alert.alert(selectedYear);
     const res = await getAllPartyData(data);
     // console.log('res of handleGetAllPartyData-----', res.data.data);
     if (res.success) {
       setAllPartyData(res.data.data);
+      console.log(res.data.data,'66666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666')
     } else {
       setAllPartyData([]);
       // console.log('error of handleGetAllPartyData-----', res.data);
+      console.log(res.data,'55555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555')
     }
   };
 
@@ -778,16 +781,13 @@ const HomeScreen = ({navigation}) => {
                     <Text>VOTES: {selectedFeature.winner.total_votes}</Text>
                     <Text>CANDIDATE NAME:</Text>
                     <Text style={{fontSize:12}}>{selectedFeature.winner.candidate_name}</Text>
-
                   </View>
-
                   <View style={{display:'flex',alignItems:'flex-start',justifyContent:'flex-start'}}>
                     <Text style={{fontWeight:700,color:AppColors.white,textDecorationLine:'underline'}}>Runner-up</Text>
                     <Text>PARTY: {selectedFeature.runner_up.party}</Text>
                     <Text>VOTES: {selectedFeature.runner_up.total_votes}</Text>
                     <Text>CANDIDATE NAME:</Text>
                     <Text style={{fontSize:12}}>{selectedFeature.runner_up.candidate_name}</Text>
-
                   </View>
                 </View>
                 
@@ -821,8 +821,8 @@ const HomeScreen = ({navigation}) => {
                 value={electorsData?.Parliamentary_Constituencies}
               />
               <TableKeyVauePair
-                tablekey={'GENERAL :'}
-                value={electorsData?.GENERAL}
+                tablekey={'UR :'}
+                value={electorsData?.UR}
               />
               <TableKeyVauePair tablekey={'SC :'} value={electorsData?.SC} />
               <TableKeyVauePair tablekey={'ST :'} value={electorsData?.ST} />
@@ -830,7 +830,7 @@ const HomeScreen = ({navigation}) => {
           )}
 
           {/* {--------------------------------DONE---------------------------------} */}
-          {allPartyData && selectetdState && allPartyData.length > 0 && (
+          {allPartyData && allPartyData.length > 0 && (
             <View style={styles.container}>
               <View style={styles.tableHeader}>
                 <Text style={styles.headerText}>PARTY</Text>
@@ -851,7 +851,7 @@ const HomeScreen = ({navigation}) => {
           )}
 
           {/* {--------------------------------DONE---------------------------------} */}
-          {selectetdState && <View
+          {allPartyData&&<View
             style={{
               backgroundColor: AppColors.white,
               elevation: 5,

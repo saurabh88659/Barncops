@@ -55,10 +55,17 @@ export const getConstituencyElectorsData = async data => {
 
 export const getAllPartyData = async data => {
   const {year, state, id} = data;
-  const URL =
+  let URL;
+  if(state!=''){
+    URL = 
     id == 1
-      ? `${BASE_URL}data/all-party/?state_name=${state}&year=${year}`
-      : `${BASE_URL}vidhan-sabha/all-party/?state_name=${state}&year=${year}`;
+        ? `${BASE_URL}data/all-party/?state_name=${state}&year=${year}`
+        : `${BASE_URL}vidhan-sabha/all-party/?state_name=${state}&year=${year}`;
+  }
+  else{
+    URL=`${BASE_URL}data/all-party-india/?year=${year}`
+  }
+  
   try {
     const result = Instance('GET', URL, null, {});
     return result;

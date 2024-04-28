@@ -528,9 +528,9 @@ const ConstituencyScreen = ({navigation, route}) => {
                   value={electorsData?.Parliamentary_Constituencies||electorsData?.total_ac}
                 />
                 <TableKeyVauePair
-                  tablekey={'GENERAL :'}
-                  value={electorsData?.GENERAL}
-                />
+                tablekey={'UR :'}
+                value={electorsData?.UR}
+              />
                 <TableKeyVauePair tablekey={'SC :'} value={electorsData?.SC} />
                 <TableKeyVauePair tablekey={'ST :'} value={electorsData?.ST} />
               </View>
