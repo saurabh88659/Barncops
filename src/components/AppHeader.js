@@ -12,14 +12,14 @@ const AppHeader = ({
   return (
     <View
       style={{
-        height: 45,
+        height: 40,
         width: '100%',
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: AppColors.white,
         alignItems: 'center',
         flexDirection: 'row',
-        elevation: 2,
+        // elevation: 2,
         justifyContent: 'center',
-        paddingHorizontal: 15,
+        // paddingHorizontal: 15,
       }}>
       <TouchableOpacity
         style={{
@@ -34,7 +34,7 @@ const AppHeader = ({
           <AppIcon
             Type={Icon.FontAwesome}
             name={'navicon'}
-            color={AppColors.white}
+            color={AppColors.primaryColor}
             size={22}
           />
         ) : (
@@ -42,15 +42,15 @@ const AppHeader = ({
             <AppIcon
               Type={Icon.Feather}
               name={'arrow-left'}
-              color={AppColors.white}
+              color={AppColors.primaryColor}
               size={27}
             />
           )
         )}
       </TouchableOpacity>
-      <Text style={{fontSize: 20, fontWeight: '700', color: AppColors.white}}>
+      {/* <Text style={{fontSize: 20, fontWeight: '700', color: AppColors.white}}>
         {title}
-      </Text>
+      </Text> */}
     </View>
   );
 };

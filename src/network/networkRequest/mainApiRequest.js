@@ -28,7 +28,7 @@ export const getTopFivePatry = async data => {
   try {
     const result = Instance(
       'GET',
-      BASE_URL + `data/top-five-party/?year=${year}&state_name=${state}`,
+      BASE_URL + `data/top-five-party/?year=${year}&state_name=${state.replace(/\s+/g, '_')}`,
       null,
       {},
     );
@@ -42,8 +42,8 @@ export const getConstituencyElectorsData = async data => {
   const {year, state, id} = data;
   const URL =
     id == 1
-      ? `${BASE_URL}data/electors/?state_name=${state}&year=${year}`
-      : `${BASE_URL}vidhan-sabha/electors/?state_name=${state}&year=${year}`;
+      ? `${BASE_URL}data/electors/?state_name=${state.replace(/\s+/g, '_')}&year=${year}`
+      : `${BASE_URL}vidhan-sabha/electors/?state_name=${state.replace(/\s+/g, '_')}&year=${year}`;
 
   try {
     const result = Instance('GET', URL, null, {});
@@ -56,14 +56,17 @@ export const getConstituencyElectorsData = async data => {
 export const getAllPartyData = async data => {
   const {year, state, id} = data;
   let URL;
-  if(state!=''){
+  if(state!='India'){
     URL = 
     id == 1
-        ? `${BASE_URL}data/all-party/?state_name=${state}&year=${year}`
-        : `${BASE_URL}vidhan-sabha/all-party/?state_name=${state}&year=${year}`;
+        ? `${BASE_URL}data/all-party/?state_name=${state.replace(/\s+/g, '_')}&year=${year}`
+        : `${BASE_URL}vidhan-sabha/all-party/?state_name=${state.replace(/\s+/g, '_')}&year=${year}`;
   }
   else{
-    URL=`${BASE_URL}data/all-party-india/?year=${year}`
+    URL = 
+    id == 1
+        ? `${BASE_URL}data/all-party-india/?year=${year}`
+        : `${BASE_URL}vidhan-sabha/party-india/?year=${year}`;
   }
   
   try {
@@ -90,8 +93,8 @@ export const getNdaAllianceData = async data => {
   console.log('data of nda--------', data);
   const URL =
     id == 1
-      ? `${BASE_URL}data/nda-filter/?state=${state}&year=${year}`
-      : `${BASE_URL}vidhan-sabha/nda-filter/?state=${state}&year=${year}`;
+      ? `${BASE_URL}data/nda-filter/?state=${state.replace(/\s+/g, '_')}&year=${year}`
+      : `${BASE_URL}vidhan-sabha/nda-filter/?state=${state.replace(/\s+/g, '_')}&year=${year}`;
   try {
     const result = Instance('GET', URL, null, {});
     return result;
@@ -104,8 +107,8 @@ export const getUpaAllianceData = async data => {
   const {year, state, id} = data;
   const URL =
     id == 1
-      ? `${BASE_URL}data/upa-filter/?state=${state}&year=${year}`
-      : `${BASE_URL}vidhan-sabha/upa-filter/?state=${state}&year=${year}`;
+      ? `${BASE_URL}data/upa-filter/?state=${state.replace(/\s+/g, '_')}&year=${year}`
+      : `${BASE_URL}vidhan-sabha/upa-filter/?state=${state.replace(/\s+/g, '_')}&year=${year}`;
   try {
     const result = Instance('GET', URL, null, {});
     return result;
@@ -118,8 +121,8 @@ export const getAllPcNameDataTable = data => {
   const {year, state,id} = data;
   const URL=
     id==1
-      ?`${BASE_URL}data/all-pc-name-state/?state_name=${state}&year=${year}`
-      :`${BASE_URL}vidhan-sabha/all-ac-name-state/?state_name=${state}&year=${year}`
+      ?`${BASE_URL}data/all-pc-name-state/?state_name=${state.replace(/\s+/g, '_')}&year=${year}`
+      :`${BASE_URL}vidhan-sabha/all-ac-name-state/?state_name=${state.replace(/\s+/g, '_')}&year=${year}`
   try {
     const result = Instance(
       'GET',
@@ -170,7 +173,7 @@ export const getConstituencyData = async data => {
   try {
     const result = Instance(
       'GET',
-      `${BASE_URL}ac/electors/?state_name=${state}&year=${year}`,
+      `${BASE_URL}ac/electors/?state_name=${state.replace(/\s+/g, '_')}&year=${year}`,
       null,
       data,
     );
@@ -186,7 +189,7 @@ export const getPartyData = async data => {
   try {
     const result = Instance(
       'GET',
-      `${BASE_URL}ac/all-party/?state_name=${state}&year=${year}`,
+      `${BASE_URL}ac/all-party/?state_name=${state.replace(/\s+/g, '_')}&year=${year}`,
 
       null,
       data,
@@ -208,7 +211,7 @@ export const getPartyAndCandidateData = async data => {
   try {
     const result = Instance(
       'GET',
-      `${BASE_URL}ac/all-party-candidate-data/?state_name=${state}&year=${year}&PC_Name=${constituency_name}`,
+      `${BASE_URL}ac/all-party-candidate-data/?state_name=${state.replace(/\s+/g, '_')}&year=${year}&PC_Name=${constituency_name}`,
       null,
       data,
     );
@@ -229,7 +232,7 @@ export const getPartyAndCandidatePCData = async data => {
   try {
     const result = Instance(
       'GET',
-      `${BASE_URL}data/particluar-pc/?state_name=${state}&year=${year}&constituency_name=${constituency_name}`,
+      `${BASE_URL}data/particluar-pc/?state_name=${state.replace(/\s+/g, '_')}&year=${year}&constituency_name=${constituency_name}`,
       null,
       data,
     );

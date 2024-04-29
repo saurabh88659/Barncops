@@ -16,9 +16,10 @@ const MainStack = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name={'DrawerStack'} component={DrawerStack} />
-      <Stack.Screen name={routes.Home_Screen} component={HomeScreen} />
+      <Stack.Screen name={routes.Home_Screen} component={HomeScreen}/>
       <Stack.Screen
         name={routes.Election_Oveview_Screen}
+        
         component={ElectionOveviewScreen}
       />
       <Stack.Screen

@@ -43,10 +43,11 @@ const ConstituencyScreen = ({navigation, route}) => {
 
   // console.log(year);
   const state = route.params.state;
-  console.log(
-    'state ##############################################################@@@@@@@2222222222222222222222222222222222222=============22',
-    state,
-  );
+  const states = useSelector(state => state.appData.states);
+  // console.log(
+  //   'state ##############################################################@@@@@@@2222222222222222222222222222222222222=============22',
+  //   state,
+  // );
   const [selectetYear, setSelectedYear] = useState(yearRoute || 2019);
   // const [selectetYear, setSelectedYear] = useState(2019);
 
@@ -56,6 +57,7 @@ const ConstituencyScreen = ({navigation, route}) => {
   );
   // console.log('selected year', selectetYear);
 
+  const [selectetdState, setSelectedState] = useState(state||'');
   const [Constituency, setConstituency] = useState('1');
   const [electorsData, setElectorsData] = useState('');
   const [allPartyData, setAllPartyData] = useState([]);
@@ -102,7 +104,7 @@ const ConstituencyScreen = ({navigation, route}) => {
     // handleGetUpaAllianceData();
     // handlegetAllPcNameDataTable();
     // setScreenLoading(false);
-  }, [Constituency, state, selectetYear]);
+  }, [Constituency, selectetdState, selectetYear]);
 
   const handleGetYear = async () => {
     const data={id:Constituency}
@@ -136,7 +138,7 @@ const ConstituencyScreen = ({navigation, route}) => {
 
   const handleGetConstituencyElectorsData = async () => {
     // Alert.alert(selectetYear);
-    const data = {year: selectetYear, state: state, id: Constituency};
+    const data = {year: selectetYear, state: selectetdState, id: Constituency};
     const res = await getConstituencyElectorsData(data);
     // console.log(
     //   'res of handleGetConstituencyElectorsData---------',
@@ -154,7 +156,7 @@ const ConstituencyScreen = ({navigation, route}) => {
   };
 
   const handleGetAllPartyData = async () => {
-    const data = {year: selectetYear, state: state, id: Constituency};
+    const data = {year: selectetYear, state: selectetdState, id: Constituency};
     const res = await getAllPartyData(data);
     // console.log('res of handleGetAllPartyData-----', res.data.data);
     if (res.success) {
@@ -166,7 +168,7 @@ const ConstituencyScreen = ({navigation, route}) => {
   };
 
   const handleGetNdaAllianceData = async () => {
-    const data = {year: selectetYear, state: state, id: Constituency};
+    const data = {year: selectetYear, state: selectetdState, id: Constituency};
     const res = await getNdaAllianceData(data);
     // console.log('res of NdaAllianceData---------------------', res.data.data);
     if (res.success) {
@@ -178,7 +180,7 @@ const ConstituencyScreen = ({navigation, route}) => {
   };
 
   const handleGetUpaAllianceData = async () => {
-    const data = {year: selectetYear, state: state, id: Constituency};
+    const data = {year: selectetYear, state: selectetdState, id: Constituency};
     const res = await getUpaAllianceData(data);
     // console.log('res of UpaAllianceData------------------', res.data.data);
     if (res.success) {
@@ -190,7 +192,7 @@ const ConstituencyScreen = ({navigation, route}) => {
   };
 
   const handlegetAllPcNameDataTable = async () => {
-    const data = {year: selectetYear, state: state, id: Constituency};
+    const data = {year: selectetYear, state: selectetdState, id: Constituency};
     const res = await getAllPcNameDataTable(data);
     // console.log(
     //   'res of handlegetAllPcNameDataTable--------%%%%%%%%%%%%%%%%% ',
@@ -214,7 +216,7 @@ const ConstituencyScreen = ({navigation, route}) => {
   const handleGetFilterSearchData = async () => {
     setModalVisible(!modalVisible);
     const paramObject = {
-      state_name: state,
+      state_name: selectetdState.replace(' ','_'),
       year: selectetYear,
       candidate: CandidateSearch,
       margin_percentage: marginPercentagSearch,
@@ -432,8 +434,21 @@ const ConstituencyScreen = ({navigation, route}) => {
                 alignSelf: 'center',
                 marginVertical: 2,
               }}>
-              {state.replace("_"," ")}
+              {selectetdState?selectetdState.replace("_"," "):'India'}
             </Text>
+            <AppDropDown
+              height={80}
+              data={states}
+              onChange={item => {
+                // getFiteredJson(IndiaJson, item.state_name);
+                setSelectedState(item.state_name.replace("_"," "));
+              }}
+              value={selectetdState?.state_name}
+              labelField="state_name"
+              valueField="state_name"
+              labelText="Select State"
+              placeholder={selectetdState?`${selectetdState.replace("_"," ")}`:"--Select State--"}
+            />
            {formattedYears && <AppDropDown
               style={{marginTop: 10}}
               height={80}
@@ -503,7 +518,7 @@ const ConstituencyScreen = ({navigation, route}) => {
               </TouchableOpacity>
             </View>
 
-            {electorsData && (
+            {electorsData && selectetdState!='India' && (
               <View
                 style={{
                   backgroundColor: AppColors.white,
@@ -556,7 +571,7 @@ const ConstituencyScreen = ({navigation, route}) => {
               </View>
             )}
 
-            <View
+            {<View
               style={{
                 backgroundColor: AppColors.white,
                 elevation: 5,
@@ -661,9 +676,9 @@ const ConstituencyScreen = ({navigation, route}) => {
                   Total Seats
                 </Text>
               </View>
-            </View>
+            </View>}
 
-            <ScrollView horizontal contentContainerStyle={{}}>
+           {ndaData&& selectetdState!='India' && <ScrollView horizontal contentContainerStyle={{}}>
               <View
                 style={{
                   padding: 10,
@@ -809,9 +824,9 @@ const ConstituencyScreen = ({navigation, route}) => {
                   </View>
                 )}
               </View>
-            </ScrollView>
+            </ScrollView>}
 
-            <View
+           {ndaData && selectetdState!='India' && <View
               style={{
                 backgroundColor: AppColors.white,
                 elevation: 5,
@@ -908,10 +923,10 @@ const ConstituencyScreen = ({navigation, route}) => {
                   Contested Voteshare
                 </Text>
               </View>
-            </View>
+            </View>}
 
             <View></View>
-            <View style={{flexDirection: 'row', marginBottom: 3}}>
+            {selectetdState!='India' && <View style={{flexDirection: 'row', marginBottom: 3}}>
               <TouchableOpacity
                 onPress={() => setModalVisible(!modalVisible)}
                 style={{
@@ -952,9 +967,9 @@ const ConstituencyScreen = ({navigation, route}) => {
                   Clear Filter
                 </Text>
               </TouchableOpacity>
-            </View>
+            </View>}
 
-            {allPcNameTableData.length > 0 ? (
+            {allPcNameTableData.length > 0 && selectetdState ? (
               <ScrollView horizontal contentContainerStyle={{}}>
                 <View
                   style={{
@@ -1169,7 +1184,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                                   {
                                     constituency_name: item?.constituency_name,
                                     year: selectetYear,
-                                    state: state,
+                                    state: selectetdState,
                                   },
                                 )
                               }
@@ -1358,7 +1373,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                 </View>
               </ScrollView>
             ) : (
-              <View style={{alignItems: 'center', paddingVertical: 20}}>
+              (selectetdState!='India' &&<View style={{alignItems: 'center', paddingVertical: 20}}>
                 <Text
                   style={{
                     fontSize: 16,
@@ -1368,7 +1383,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                   }}>
                   NO DATA FOUND!
                 </Text>
-              </View>
+              </View>)
             )}
           </View>
         </ScrollView>

@@ -7,7 +7,7 @@ export const centeredLatitudeAndLongitude = {
     longitudeDelta: 5,
   },
   //edit
-  Andhra_Pradesh: {
+  'Andhra Pradesh': {
     latitude: 15.9129,
     longitude: 79.74,
     latitudeDelta: 10,
@@ -35,10 +35,10 @@ export const centeredLatitudeAndLongitude = {
 
   //edit
   'Daman_&_Diu': {
-    latitude: 20.7144,
-    longitude: 72.8663,
-    latitudeDelta: 1,
-    longitudeDelta: 1,
+    latitude: 20.555,
+    longitude: 71.88749999999999,
+    latitudeDelta: 0.5,
+    longitudeDelta: 0.5,
   },
   Odisha: {
     latitude: 20.9517,
@@ -54,10 +54,10 @@ export const centeredLatitudeAndLongitude = {
   },
   //edit
   'Dadra_&_Nagar_Haveli': {
-    latitude: 20.1809,
-    longitude: 73.0169,
-    latitudeDelta: 1,
-    longitudeDelta: 1,
+    latitude: 20.2055,
+    longitude: 73.064,
+    latitudeDelta: 0.5,
+    longitudeDelta: 0.5,
   },
   Delhi: {
     latitude: 28.7041,
@@ -65,12 +65,12 @@ export const centeredLatitudeAndLongitude = {
     latitudeDelta: 1,
     longitudeDelta: 1,
   },
-  'Goa_Daman_&_Diu': {
-    latitude: 15.2993,
-    longitude: 74.124,
-    latitudeDelta: 1,
-    longitudeDelta: 1,
-  },
+  // 'Goa_Daman_&_Diu': {
+  //   latitude: 15.2993,
+  //   longitude: 74.124,
+  //   latitudeDelta: 1,
+  //   longitudeDelta: 1,
+  // },
   // 'Goa_Daman_&_Diu': {
   //   latitude: 15.2993,
   //   longitude: 74.124,
@@ -245,4 +245,10 @@ export const centeredLatitudeAndLongitude = {
     latitudeDelta: 6,
     longitudeDelta: 6,
   },
+  Chandigarh:{
+    latitude: 30.7315,
+    longitude: 76.7765,
+    latitudeDelta: 0.5,
+    longitudeDelta: 0.5,
+  }
 };
