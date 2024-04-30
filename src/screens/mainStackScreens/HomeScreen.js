@@ -77,14 +77,24 @@ const HomeScreen = ({navigation}) => {
     if (selectetdState && centeredLatitudeAndLongitude[selectetdState]) {
       // Alert.alert("",JSON.stringify(centeredLatitudeAndLongitude));
       // setRefresh(!refresh);
-      setinitialRegion({
-        latitude: centeredLatitudeAndLongitude[selectetdState].latitude,
-        longitude: centeredLatitudeAndLongitude[selectetdState].longitude,
-        latitudeDelta:
-          centeredLatitudeAndLongitude[selectetdState].latitudeDelta,
-        longitudeDelta:
-          centeredLatitudeAndLongitude[selectetdState].longitudeDelta,
-      });
+      if(selectetdState=='India'){
+        setinitialRegion({
+          latitude: 20.5937,
+          longitude: 78.9629,
+          latitudeDelta: 30,
+          longitudeDelta: 30,
+        })
+      }
+      else{
+        setinitialRegion({
+          latitude: centeredLatitudeAndLongitude[selectetdState].latitude,
+          longitude: centeredLatitudeAndLongitude[selectetdState].longitude,
+          latitudeDelta:
+            centeredLatitudeAndLongitude[selectetdState].latitudeDelta,
+          longitudeDelta:
+            centeredLatitudeAndLongitude[selectetdState].longitudeDelta,
+        });
+      }
     }
   }, [selectetdState]);
 
@@ -289,7 +299,7 @@ const HomeScreen = ({navigation}) => {
     const filteredFeatures = geojsonData.features.filter(
       feature => feature.properties.st_name == stateName.replace(/\s+/g, '_')
     );
-    Alert.alert('',JSON.stringify(filteredFeatures))
+    // Alert.alert('',JSON.stringify(filteredFeatures))
     // Colorize the filtered features based on PC winner party
     const colorizedFeatures = filteredFeatures.map(feature => {
       const pcName = (feature.properties.pc_name).toUpperCase();
@@ -996,7 +1006,7 @@ const HomeScreen = ({navigation}) => {
                   showValuesAsLabels
                 />
               )}
-              {pieDatavotes && (
+              {pieDatavotes && pieDatavotes.length > 0 && (
                 <Text
                   style={{color: AppColors.black, marginTop: 10, fontSize: 17}}>
                   Total Votes
@@ -1021,7 +1031,7 @@ const HomeScreen = ({navigation}) => {
                   xAxisLabelTextStyle={{color: 'black', fontSize: 13}}
                 />
               )}
-              {pieDatavotes1 && (
+              {pieDatavotes1 &&  pieDatavotes1.length > 0 && (
                 <Text
                   style={{
                     color: AppColors.black,

@@ -571,7 +571,7 @@ const ConstituencyScreen = ({navigation, route}) => {
               </View>
             )}
 
-            {<View
+            {pieDatavotes1 && DotVotesDatas && DotVotesDatas.length > 0 && pieDatavotes1 && pieDatavotes1.length > 0 &&  <View
               style={{
                 backgroundColor: AppColors.white,
                 elevation: 5,
@@ -644,10 +644,10 @@ const ConstituencyScreen = ({navigation, route}) => {
                     showValuesAsLabels
                   />
                 )}
-                <Text
+               {pieDatavotes.length > 0 && <Text
                   style={{color: AppColors.black, marginTop: 10, fontSize: 17}}>
                   Total Votes
-                </Text>
+                </Text>}
               </>
               <View
                 style={{
@@ -667,14 +667,14 @@ const ConstituencyScreen = ({navigation, route}) => {
                     xAxisLabelTextStyle={{color: 'black', fontSize: 13}}
                   />
                 )}
-                <Text
+                {pieDatavotes1 && pieDatavotes1.length > 0 &&<Text
                   style={{
                     color: AppColors.black,
                     marginTop: 10,
                     fontSize: 17,
                   }}>
                   Total Seats
-                </Text>
+                </Text>}
               </View>
             </View>}
 
@@ -925,7 +925,7 @@ const ConstituencyScreen = ({navigation, route}) => {
               </View>
             </View>}
 
-            <View></View>
+            {/* <View></View> */}
             {selectetdState!='India' && <View style={{flexDirection: 'row', marginBottom: 3}}>
               <TouchableOpacity
                 onPress={() => setModalVisible(!modalVisible)}
