@@ -718,7 +718,7 @@ const HomeScreen = ({navigation}) => {
               placeholder={`${selectedYear}`}
             />
           </View>
-          <View style={{alignItems: 'center', paddingVertical: 25}}>
+          {/* <View style={{alignItems: 'center', paddingVertical: 25}}>
               <TouchableOpacity
                 onPress={() => setConstituency('1')}
                 style={{
@@ -771,7 +771,7 @@ const HomeScreen = ({navigation}) => {
                   Assembly Constituency
                 </Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
           {/* <TouchableOpacity
             onPress={() => getFiteredJson(IndiaJson)}
             style={{
@@ -802,6 +802,8 @@ const HomeScreen = ({navigation}) => {
               customMapStyle={[]}
               provider={PROVIDER_GOOGLE}
               zoomControlEnabled={true}
+              scrollEnabled={false}
+              scrollDuringRotateOrZoomEnabled={true}
               style={{
                 height: '100%',
                 width: '100%',

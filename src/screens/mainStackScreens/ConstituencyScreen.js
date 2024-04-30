@@ -172,7 +172,7 @@ const ConstituencyScreen = ({navigation, route}) => {
     const res = await getNdaAllianceData(data);
     // console.log('res of NdaAllianceData---------------------', res.data.data);
     if (res.success) {
-      setNdaData(res.data.data);
+      setNdaData(res.data.data[0]);
     } else {
       setNdaData('');
       console.log('error of handlegetNdaAllianceData-----', res.data);
@@ -184,7 +184,7 @@ const ConstituencyScreen = ({navigation, route}) => {
     const res = await getUpaAllianceData(data);
     // console.log('res of UpaAllianceData------------------', res.data.data);
     if (res.success) {
-      SetUpaData(res.data.data);
+      SetUpaData(res.data.data[0]);
     } else {
       SetUpaData('');
       console.log('error of handleGetUpaAllianceData-----', res.data);
@@ -289,6 +289,8 @@ const ConstituencyScreen = ({navigation, route}) => {
     'JD(S)': '#76BA3F',
     NPF: '#93E3FC',
     AIMIM: '#94E3FB',
+    NDA:'#FF8549',
+    UPA:'#5E30EB'
   };
 
   //1st grapth data[-------------------------------------------------------]
@@ -327,48 +329,88 @@ const ConstituencyScreen = ({navigation, route}) => {
   //2nd grapth data[-------------------------------------------------------]
   const PieChartColors2 = ['#177AD5', '#79D2DE'];
 
-  const combineData = [
-    {
-      partyName: ndaData?.Alliance,
-      Votes_percentage: ndaData?.Votes_percentage,
-      Seats: ndaData?.Seats,
-      Contested_Voteshare: ndaData?.Contested_Voteshare,
-    },
-    {
-      partyName: upaData?.Alliance,
-      Votes_percentage: upaData?.Votes_percentage,
-      Seats: upaData?.Seats,
-      Contested_Voteshare: upaData?.Contested_Voteshare,
-    },
-  ];
+  // const combineData = [
+  //   {
+  //     partyName: ndaData?.Alliance,
+  //     Votes_percentage: ndaData?.Votes_percentage,
+  //     Seats: ndaData?.Seats,
+  //     Contested_Voteshare: ndaData?.Contested_Voteshare,
+  //   },
+  //   {
+  //     partyName: upaData?.Alliance,
+  //     Votes_percentage: upaData?.Votes_percentage,
+  //     Seats: upaData?.Seats,
+  //     Contested_Voteshare: upaData?.Contested_Voteshare,
+  //   },
+  // ];
+const [combineData,setCombineData]=useState([])
+  useEffect(() => {
+    setCombineData([]);
+    // const ndaData={
+    //   partyName: 'NDA',
+    //    Votes_percentage: 34.56,
+    //     Seats: 1,
+    //   Contested_Voteshare: 107828,
+    // }
 
-  const pieDataSeat = combineData.slice(0, 6)?.map((party, index) => {
+    // const upaData=  {
+    //       partyName: 'UPA',
+    //       Votes_percentage: 56.56,
+    //        Seats: 2,
+    //       Contested_Voteshare: 17828,
+    //   }
+
+    if (ndaData && upaData) {
+      const array = [];
+      array.push(ndaData);
+      array.push(upaData);
+      // Alert.alert(JSON.stringify(array))
+      setCombineData(array);
+    }
+  }, [ndaData, upaData]);
+
+  // const combineData=[
+  //   {
+  //     partyName: 'NDA',
+  //     Votes_percentage: 34.56,
+  //      Seats: 1,
+  //     Contested_Voteshare: 107828,
+  // },
+//   {
+//     partyName: 'UPA',
+//     Votes_percentage: 56.56,
+//      Seats: 2,
+//     Contested_Voteshare: 17828,
+// }
+// ]
+
+  const pieDataSeat = combineData.map((party, index) => {
     console.log('pieDataSeat1111111111111111111111111111', party);
     return {
       value: party?.Seats,
-      color: PieChartColors2[index],
+      color: partyColors[party?.partyName] || '#000000',
       text: party?.Seats,
     };
   });
 
-  const pieDataseat1 = combineData?.slice(0, 6)?.map((party, index) => {
+  const pieDataseat1 = combineData?.map((party, index) => {
     return {
       value: party?.Contested_Voteshare,
-      frontColor: PieChartColors2[index],
-      text: party?.Total_Seats,
+      frontColor: partyColors[party?.partyName] || '#000000',
+      text: party?.Contested_Voteshare,
       label: party?.partyName,
       topLabelComponent: () => (
         <Text style={{color: AppColors.black, fontSize: 16, marginBottom: 4}}>
-          {party?.Total_Seats}
+          {party?.Contested_Voteshare}
         </Text>
       ),
     };
   });
 
-  const DotSeatDatas = combineData.slice(0, 6)?.map((party, index) => {
+  const DotSeatDatas = combineData.map((party, index) => {
     return {
       Partyname: party?.partyName,
-      color: PieChartColors2[index],
+      color: partyColors[party?.partyName] || '#000000',
       Contested_Voteshare: party?.Contested_Voteshare,
       Votes_percentage: party?.Votes_percentage,
       seats: party?.Seats,
@@ -487,7 +529,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                   elevation: 7,
                 }}>
                 <Text style={{color: AppColors.white, fontWeight: '800'}}>
-                  Parliamentary Constituency
+                  Parliamentary Elections
                 </Text>
               </TouchableOpacity>
 
@@ -513,7 +555,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                   elevation: 7,
                 }}>
                 <Text style={{color: AppColors.white, fontWeight: '800'}}>
-                  Assembly Constituency
+                  Assembly Elections
                 </Text>
               </TouchableOpacity>
             </View>
@@ -826,7 +868,7 @@ const ConstituencyScreen = ({navigation, route}) => {
               </View>
             </ScrollView>}
 
-           {ndaData && selectetdState!='India' && <View
+           {ndaData && selectetdState!='India'  && combineData.length > 0 && <View
               style={{
                 backgroundColor: AppColors.white,
                 elevation: 5,
@@ -901,7 +943,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                   marginTop: 30,
                   alignItems: 'center',
                 }}>
-                {pieDatavotes1.length > 0 && (
+                {pieDataseat1.length > 0 && (
                   <BarChart
                     height={300}
                     textColor="black"
@@ -909,7 +951,7 @@ const ConstituencyScreen = ({navigation, route}) => {
                     shadow={'red'}
                     textSize={15}
                     barColor={'black'}
-                    data={pieDatavotes1}
+                    data={pieDataseat1}
                     yAxisTextStyle={{color: 'black'}}
                     xAxisLabelTextStyle={{color: 'black', fontSize: 13}}
                   />

@@ -1,6 +1,6 @@
 export const centeredLatitudeAndLongitude = {
   // edited
-  'Andaman_&_Nicobar_Islands': {
+  'Andaman & Nicobar Islands': {
     latitude: 11.7401,
     longitude: 92.6586,
     latitudeDelta: 5,
@@ -14,7 +14,7 @@ export const centeredLatitudeAndLongitude = {
     longitudeDelta: 10,
   },
   //edited
-  Arunachal_Pradesh: {
+  'Arunachal Pradesh': {
     latitude: 28.218,
     longitude: 94.7278,
     latitudeDelta: 7,
@@ -89,14 +89,14 @@ export const centeredLatitudeAndLongitude = {
     latitudeDelta: 5,
     longitudeDelta: 5,
   },
-  Himachal_Pradesh: {
+  'Himachal Pradesh': {
     latitude: 31.1048,
     longitude: 77.1734,
     latitudeDelta: 4,
     longitudeDelta: 4,
   },
   //edited
-  'Jammu_&_Kashmir': {
+  'Jammu & Kashmir': {
     latitude: 33.7782,
     longitude: 76.5762,
     latitudeDelta: 10,
@@ -132,7 +132,7 @@ export const centeredLatitudeAndLongitude = {
     latitudeDelta: 1,
     longitudeDelta: 1,
   },
-  Madhya_Pradesh: {
+  'Madhya Pradesh': {
     latitude: 22.9734,
     longitude: 78.6569,
     latitudeDelta: 10,
@@ -194,7 +194,7 @@ export const centeredLatitudeAndLongitude = {
     longitudeDelta: 2,
   },
   //edited
-  Tamil_Nadu: {
+  'Tamil Nadu': {
     latitude: 11.1271,
     longitude: 78.6569,
     latitudeDelta: 6,
@@ -212,7 +212,7 @@ export const centeredLatitudeAndLongitude = {
     latitudeDelta: 2,
     longitudeDelta: 2,
   },
-  Uttar_Pradesh: {
+  'Uttar Pradesh': {
     latitude: 26.8467,
     longitude: 80.9462,
     latitudeDelta: 10,
@@ -225,7 +225,7 @@ export const centeredLatitudeAndLongitude = {
     latitudeDelta: 4,
     longitudeDelta: 4,
   },
-  West_Bengal: {
+  'West Bengal': {
     latitude: 22.9868,
     longitude: 87.855,
     latitudeDelta: 6,
